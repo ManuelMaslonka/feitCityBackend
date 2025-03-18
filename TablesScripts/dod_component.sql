@@ -1,0 +1,1 @@
+INSERT INTO public.dod_component (id, button_link, button_text, title, visible) VALUES (1, 'https://www.youtube.com/embed/aIXOiJYfkJ0?playlist=aIXOiJYfkJ0&controls=0&rel=0&showinfo=0&background=1&autoplay=1&loop=1&mute=1', 'Chcem vedieť viac', 'Deň otvorených dverí 2025', true);

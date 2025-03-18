@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    generate-ddl: true
+
+
+
+  application:
+    name: FeitUniza
+    jwt:
+      secret-key: "f45666c0d61ee85f12c95767f3c27ae4c08711387ada21ab3ba6828a133dd278"
+      expiration: "86400"

@@ -1,0 +1,1 @@
+INSERT INTO public.slider_component (id, visible, description, label, title) VALUES (1, true, 'Okrem kvalitného vzdelania ti ponúkame aj super študentský život. Život, ktorý patrí k nádherným študentským rokom', 'Študentský život', 'Život na FEIT');

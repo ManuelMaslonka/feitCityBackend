@@ -1,0 +1,1 @@
+INSERT INTO public.why_feit_component (id, title, visible, annual_stipend, application, count_description, count_programs, image_url, salary, video_url) VALUES (1, 'Prečo študovať na FEIT?', true, 1200, '96', 'Bakalárskych programov', 6, 'feitImages/usmev.jpg', 1600, 'https://www.youtube.com/watch?v=k8cmcQF-CNo');

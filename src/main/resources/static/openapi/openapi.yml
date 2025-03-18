@@ -1,0 +1,1041 @@
+openapi: 3.0.0
+info:
+  title: Chat API
+  version: 1.0.0
+  description: FeitApi for university of UNIZA, FEIT
+servers:
+  - url: http://localhost:8080/
+
+paths:
+  /api/v1/blog:
+    get:
+      summary: Get all blog posts with pagination
+      operationId: getAllPosts
+      tags:
+        - blog
+      parameters:
+        - name: page
+          in: query
+          description: Page number (zero-based)
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageListPost'
+    post:
+      summary: Create a new blog post
+      operationId: createPost
+      tags:
+        - blog
+      requestBody:
+        description: Blog post to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Invalid input
+
+  /api/v1/blog/{id}:
+    get:
+      summary: Get blog post by ID
+      operationId: getPostById
+      tags:
+        - blog
+      parameters:
+        - name: id
+          in: path
+          description: ID of the blog post
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Post not found
+
+    put:
+      summary: Update a blog post
+      operationId: updatePost
+      tags:
+        - blog
+      parameters:
+        - name: id
+          in: path
+          description: ID of the blog post to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Updated blog post
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '200':
+          description: Post updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Invalid input
+        '404':
+          description: Post not found
+
+    delete:
+      summary: Delete a blog post
+      operationId: deletePost
+      tags:
+        - blog
+      parameters:
+        - name: id
+          in: path
+          description: ID of the blog post to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Post deleted successfully
+        '404':
+          description: Post not found
+
+  /authenticate/signup:
+    post:
+      summary: Registrácia nového používateľa
+      operationId: signup
+
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpRequest'
+      responses:
+        '201':
+          description: Používateľ úspešne zaregistrovaný
+        '400':
+          description: 'Neplatná požiadavka na registráciu používateľa'
+
+  /authenticate/signin:
+    post:
+      summary: Prihlásenie používateľa
+      operationId: signin
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+      responses:
+        '200':
+          description: Používateľ úspešne prihlásený
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignInResponse'
+        '400':
+          description: 'Neplatná požiadavka na prihlásenie používateľa'
+
+
+  /authenticate/logout:
+    post:
+      summary: Odhlásenie používateľa
+      operationId: logout
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: Používateľ úspešne odhlásený
+
+
+  /api/v1/components/faqcomponent:
+    get:
+      summary: Get FAQ component data
+      operationId: getFaqComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: FAQ component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaqComponent'
+    put:
+      summary: Update FAQ component data
+      operationId: updateFaqComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaqComponent'
+      responses:
+        '200':
+          description: FAQ component updated
+
+  /api/v1/components/otheractivities:
+    get:
+      summary: Get other activities component data
+      operationId: getOtherActivitiesComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: Other activities component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OtherActivitiesComponent'
+    put:
+      summary: Update other activities component data
+      operationId: updateOtherActivitiesComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtherActivitiesComponent'
+      responses:
+        '200':
+          description: Other activities component updated
+
+  /api/v1/components/logocomponent:
+    get:
+      summary: Get logo component data
+      operationId: getLogoComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: Logo component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoComponent'
+    put:
+      summary: Update logo component data
+      operationId: updateLogoComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoComponent'
+      responses:
+        '200':
+          description: Logo component updated
+
+  /api/v1/components/afterschool:
+    get:
+      summary: Get after school component data
+      operationId: getAfterSchoolComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: After school component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AfterSchoolComponent'
+    put:
+      summary: Update after school component data
+      operationId: updateAfterSchoolComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AfterSchoolComponent'
+      responses:
+        '200':
+          description: After school component updated
+
+  /api/v1/components/feitstory:
+    get:
+      summary: Get FEIT Story component data
+      operationId: getFeitStoryComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: FEIT Story component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeitStoryComponent'
+    put:
+      summary: Update FEIT Story component data
+      operationId: updateFeitStoryComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeitStoryComponent'
+      responses:
+        '200':
+          description: FEIT Story component updated
+
+  /api/v1/components/slider:
+    get:
+      summary: Get slider component data
+      operationId: getSliderComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: Slider component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SliderComponent'
+    put:
+      summary: Update SliderComponent
+      operationId: updateSliderComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SliderComponent'
+      responses:
+        '200':
+          description: Slider component updated
+
+  /api/v1/components/featureboxs:
+    get:
+      summary: Get all feature box data
+      operationId: getFeatureBoxs
+      tags:
+        - Components
+      responses:
+        '200':
+          description: Feature box data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FeatureBoxComponent'
+                  visibility:
+                    type: boolean
+                    description: Whether the feature box components are visible
+    post:
+      summary: Create a new feature box
+      operationId: createFeatureBox
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureBoxComponent'
+      responses:
+        '200':
+          description: Feature box created
+
+  /api/v1/components/dod:
+    get:
+      summary: Get DOD component data
+      operationId: getDODComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: DOD component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DODComponent'
+    post:
+      summary: Update DOD component data
+      operationId: updateDODComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DODComponent'
+      responses:
+        '200':
+          description: DOD component updated
+
+  /api/v1/components/whyfeit:
+    get:
+      summary: Get WhyFeit component data
+      operationId: getWhyFeitComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: WhyFeit component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhyFeitComponent'
+    post:
+      summary: Update WhyFeit component data
+      operationId: updateWhyFeitComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WhyFeitComponent'
+      responses:
+        '200':
+          description: WhyFeit component updated
+
+  /api/v1/components/countdown:
+    get:
+      summary: Get countdown component data
+      operationId: getCountdownComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: Countdown component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountdownComponent'
+    post:
+      summary: Update countdown component data
+      operationId: updateCountdownComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CountdownComponent'
+      responses:
+        '200':
+          description: Countdown component updated
+
+  /api/v1/components/video:
+    get:
+      summary: Get video component data
+      operationId: getVideoComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: Video component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoComponent'
+    post:
+      summary: Update video component data
+      operationId: updateVideoComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoComponent'
+      responses:
+        '200':
+          description: Video component updated
+
+
+components:
+  schemas:
+    FeatureBoxComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the feature box component
+        title:
+          type: string
+          description: The title of the feature box component
+        description:
+          type: string
+          description: The description of the feature box component
+        imageUrl:
+          type: string
+          description: The URL of the image
+        link:
+          type: string
+          description: The link associated with the feature box component
+        visible:
+          type: boolean
+          description: Whether the feature box component is visible
+      required:
+        - title
+        - description
+        - imageUrl
+        - link
+
+
+    CountdownComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the countdown component
+        visible:
+          type: boolean
+          description: Whether the countdown component is visible
+        endDate:
+          type: string
+          description: The end date for the countdown
+        applicationText:
+          type: string
+          description: Text for the application button
+      required:
+        - visible
+        - endDate
+        - applicationText
+
+    VideoComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the video component
+        visible:
+          type: boolean
+          description: Whether the video component is visible
+        videoUrl:
+          type: string
+          description: The URL of the video
+        title:
+          type: string
+          description: The title of the video
+        description:
+          type: string
+          description: The description of the video
+      required:
+        - visible
+        - videoUrl
+        - title
+        - description
+
+    WhyFeitComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the WhyFeit component
+        visible:
+          type: boolean
+          description: Whether the WhyFeit component is visible
+        title:
+          type: string
+          description: The title of the WhyFeit component
+        whyFeitLists:
+          type: array
+          items:
+            $ref: '#/components/schemas/WhyFeitList'
+          description: List of WhyFeit items
+        imageUrl:
+          type: string
+          description: The URL of the image
+        videoUrl:
+          type: string
+          description: The URL of the video
+        countPrograms:
+          type: integer
+          description: The count of programs
+        countDescription:
+          type: string
+          description: The description of the count
+        annualStipend:
+          type: number
+          format: float
+          description: The annual stipend amount
+        salary:
+          type: number
+          format: float
+          description: The salary amount
+        application:
+          type: string
+          description: The application text
+      required:
+        - visible
+        - title
+        - whyFeitLists
+        - imageUrl
+        - videoUrl
+        - countPrograms
+        - countDescription
+        - annualStipend
+        - salary
+        - application
+
+    WhyFeitList:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the WhyFeit list item
+        title:
+          type: string
+          description: The title of the WhyFeit list item
+        description:
+          type: string
+          description: The description of the WhyFeit list item
+      required:
+        - title
+        - description
+
+    DODComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the DOD component
+        visible:
+          type: boolean
+          description: Whether the DOD component is visible
+        title:
+          type: string
+          description: The title of the DOD component
+        buttonText:
+          type: string
+          description: The text of the button
+        buttonLink:
+          type: string
+          description: The link of the button
+      required:
+        - visible
+        - title
+        - buttonText
+        - buttonLink
+
+    SliderComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the slider component
+        visible:
+          type: boolean
+          description: Whether the slider component is visible
+        title:
+          type: string
+          description: for title
+        label:
+          type: string
+        description:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SliderItem'
+      required:
+        - visible
+        - items
+
+    SliderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the slider item
+        title:
+          type: string
+          description: The title of the slider item
+        description:
+          type: string
+          description: The description of the slider item
+        infoDescription:
+          type: string
+          description: Additional information description of the slider item
+        label:
+          type: string
+          description: The label of the slider item
+        imageUrl:
+          type: string
+          description: The URL of the image
+        videoUrl:
+          type: string
+          description: The URL of the video
+        iconsStyle:
+          type: string
+      required:
+        - title
+        - description
+        - infoDescription
+        - label
+        - imageUrl
+        - videoUrl
+
+    FeitStoryComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the FEIT story component
+        title:
+          type: string
+          description: The title of the FEIT story component
+        visible:
+          type: boolean
+          description: Whether the FEIT story component is visible
+        videoItemList:
+          type: array
+          items:
+            $ref: '#/components/schemas/VideoItem'
+          description: List of video items
+      required:
+        - title
+        - visible
+        - videoItemList
+
+    VideoItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the video item
+        title:
+          type: string
+          description: The title of the video item
+        videoUrl:
+          type: string
+          description: The URL of the video
+        imageUrl:
+          type: string
+          description: The URL of the image thumbnail
+      required:
+        - title
+        - videoUrl
+        - imageUrl
+
+    AfterSchoolComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the after school component
+        visible:
+          type: boolean
+          description: Whether the after school component is visible
+        label:
+          type: string
+          description: The label of the after school component
+        title:
+          type: string
+          description: The title of the after school component
+        description:
+          type: string
+          description: The description of the after school component
+        imageUrl:
+          type: string
+          description: The URL of the main image
+        imageUrl1:
+          type: string
+          description: The URL of the secondary image
+      required:
+        - visible
+        - label
+        - title
+        - description
+        - imageUrl
+        - imageUrl1
+
+    LogoComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the logo component
+        visible:
+          type: boolean
+          description: Whether the logo component is visible
+        logoItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogoItem'
+          description: List of logo items
+      required:
+        - visible
+        - logoItems
+
+    LogoItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the logo item
+        imageUrl:
+          type: string
+          description: The URL of the image
+        alt:
+          type: string
+          description: Alternative text flag
+      required:
+        - imageUrl
+        - alt
+
+    OtherActivitiesComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the other activities component
+        title:
+          type: string
+          description: The title of the other activities component
+        label:
+          type: string
+          description: The label of the other activities component
+        visible:
+          type: boolean
+          description: Whether the other activities component is visible
+        bannerItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/BannerItems'
+          description: List of banner items
+      required:
+        - visible
+        - title
+        - label
+        - bannerItems
+
+    BannerItems:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the banner item
+        imageUrl:
+          type: string
+          description: The URL of the image
+        visible:
+          type: boolean
+          description: Whether the banner item is visible
+        label:
+          type: string
+          description: The label of the banner item
+        title:
+          type: string
+          description: The title of the banner item
+        description:
+          type: string
+          description: The description of the banner item
+        link:
+          type: string
+          description: The link of the banner item
+        nameOfAction:
+          type: string
+          description: The name of the action for the banner item
+        icon:
+          type: string
+          description: The icon for the banner item
+      required:
+        - imageUrl
+        - visible
+        - label
+        - title
+        - description
+        - link
+        - nameOfAction
+        - icon
+
+    FaqComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the FAQ component
+        visible:
+          type: boolean
+          description: Whether the FAQ component is visible
+      required:
+        - visible
+
+    SignUpRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - name
+        - email
+        - password
+
+    SignInResponse:
+      type: object
+      properties:
+        accessToken:
+          $ref: '#/components/schemas/AccessToken'
+      required:
+        - token
+
+    AccessToken:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: The user ID.
+        token:
+          type: string
+          description: The JWT token.
+        expiration:
+          type: string
+          format: date-time
+      required:
+        - token
+        - type
+        - expiration
+        - revoked
+
+    SignInRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the post
+        title:
+          type: string
+          description: Title of the blog post
+        content:
+          type: string
+          description: Content of the blog post
+        author:
+          type: string
+          description: Author of the blog post
+        createdAt:
+          type: integer
+          format: int64
+          description: Creation timestamp
+        tags:
+          type: array
+          items:
+            type: string
+          description: List of tags for the blog post
+        mainImage:
+          type: string
+          format: byte
+          description: Main image for the blog post (base64 encoded)
+      required:
+        - title
+        - content
+
+    PostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the blog post
+        content:
+          type: string
+          description: Content of the blog post
+        tags:
+          type: array
+          items:
+            type: string
+          description: List of tags for the blog post
+        mainImage:
+          type: string
+          format: byte
+          description: Main image for the blog post (base64 encoded)
+      required:
+        - title
+        - content
+
+    PageListPost:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+          description: List of posts for the current page
+        totalElements:
+          type: integer
+          format: int64
+          description: Total number of posts
+        nextPage:
+          type: string
+          nullable: true
+          description: URL to the next page if available
