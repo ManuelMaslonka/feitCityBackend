@@ -53,8 +53,8 @@ public class SecurityConfiguration {
     private void configureAuthorizationRules(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
         auth
                 .requestMatchers(
+                        "authenticate/**",
                         "api/v1/components/**",
-                        "/authenticate/**",
                         "/v2/api-docs",
                         "/v3/api-docs",
                         "/v3/api-docs/**",

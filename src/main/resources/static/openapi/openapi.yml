@@ -7,6 +7,7 @@ servers:
   - url: http://localhost:8080/
 
 paths:
+#  /api/v1/image:
   /api/v1/blog:
     get:
       summary: Get all blog posts with pagination
