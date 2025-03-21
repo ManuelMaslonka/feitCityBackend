@@ -1,3 +1,20 @@
-INSERT INTO public.banner_items (id, description, icon, image_url, label, link, name_of_action, title, visible, other_activities_id) VALUES (1, 'Nahliadni do fakultných aktivít, prečítaj si niečo o každodennom dianí na FEIT.', 'line-icon-Light-Bulb2', 'feitImages/blog.jpg', 'Blog', 'https://www.feitcity.sk/blog/', 'Prejsť na blog', 'Čo sa deje na FEIT?', true, 1);
-INSERT INTO public.banner_items (id, description, icon, image_url, label, link, name_of_action, title, visible, other_activities_id) VALUES (2, 'Súťaž kreatívnych stredoškolákov, ktorí realizujú svoje myšlienky.', 'line-icon-Brain-2', 'feitImages/1miesto.jpg', 'Súťaž', 'https://feit.uniza.sk/tmr/', 'Viac o súťaži', 'Technická myšlienka roka', true, 1);
-INSERT INTO public.banner_items (id, description, icon, image_url, label, link, name_of_action, title, visible, other_activities_id) VALUES (3, 'Pozri si našu ponuku špeciálnych cvičení pre stredné školy a gymnázia.', 'line-icon-University-2', 'feitImages/specialne.jpg', 'Špecialitky', 'https://www.feitcity.sk/specialne-cvicenia/', 'Pozrieť ponuku', 'Špeciálne cvičenia?', true, 1);
+create table banner_items
+(
+    id                  bigint not null
+        primary key,
+    description         varchar(255),
+    icon                varchar(255),
+    image_url           varchar(255),
+    label               varchar(255),
+    link                varchar(255),
+    name_of_action      varchar(255),
+    title               varchar(255),
+    visible             boolean,
+    other_activities_id bigint
+        constraint fkgpsige1nqhannwai1k1dgrn3r
+            references other_activities
+);
+
+alter table banner_items
+    owner to postgres;
+

@@ -27,10 +27,8 @@ public class Post {
     @Column(name = "created_at")
     private Long createdAt;
 
-    // List of tags
-    @ElementCollection
-    @CollectionTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
-    @Column(name = "tags")
+    @OneToMany(targetEntity = Tags.class)
+    @JoinColumn(name = "tags")
     private List<String> tags;
 
     @Column(name = "main_image")

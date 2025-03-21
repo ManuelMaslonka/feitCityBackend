@@ -1,3 +1,17 @@
+create table logo_item
+(
+    id                bigint not null
+        primary key,
+    alt               varchar(255),
+    image_url         varchar(255),
+    logo_component_id bigint
+        constraint fkqgb44t08bwhxj8p3qwby2sd8w
+            references logo_component
+);
+
+alter table logo_item
+    owner to postgres;
+
 INSERT INTO public.logo_item (id, alt, image_url, logo_component_id) VALUES (1, 'GoodRequest', 'feitImages/loga/logo-goodrequest.png', 1);
 INSERT INTO public.logo_item (id, alt, image_url, logo_component_id) VALUES (2, 'SSE', 'feitImages/loga/logo-sse-180x92.png', 1);
 INSERT INTO public.logo_item (id, alt, image_url, logo_component_id) VALUES (3, 'SystemHouse Solutions', 'feitImages/loga/SystemHouse_Solutions_logo_stående_PMS.png', 1);
