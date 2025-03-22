@@ -1,8 +1,9 @@
 package sk.uniza.feit.blog.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sk.uniza.feit.blog.domain.Post;
 import sk.uniza.feit.blog.domain.service.PostService;
@@ -34,17 +35,32 @@ public class PostController implements BlogRestApi {
         this.tagService = tagService;
     }
 
-    @Override
-    public ResponseEntity<PostDto> createPost(String title, String content, List<String> tags, MultipartFile mainImage) {
+    @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/api/v1/blog",
+            produces = { "application/json" },
+            consumes = { "multipart/form-data", "application/json" }
+    )
+    ResponseEntity<PostDto> createPost(
+            @RequestBody(required = false) PostRequestDto postRequestDto,
+            @RequestPart(value = "mainImage", required = false) MultipartFile mainImage
+    ) {
+
+        System.out.println("test");
+
         try {
             Post post = new Post();
-            post.setTitle(title);
-            post.setContent(content);
+            post.setTitle(postRequestDto.getTitle());
+            post.setContent(postRequestDto.getContent());
             post.setAuthor(currentUserDetailService.getFullCurrentUser().getName());
             post.setCreatedAt(LocalDateTime.now());
-            post.setTags(tags);
 
-            tagService.create(tags);
+            if (postRequestDto.getTags() != null) {
+                tagService.create(postRequestDto.getTags());
+                post.setTags(postRequestDto.getTags());
+            }
+
+
 
             if (mainImage != null) {
                 post.setMainImage(mainImage.getBytes());
