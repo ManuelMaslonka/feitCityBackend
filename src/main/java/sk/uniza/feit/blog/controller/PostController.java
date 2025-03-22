@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sk.uniza.feit.blog.domain.Post;
+import sk.uniza.feit.blog.domain.Tag;
 import sk.uniza.feit.blog.domain.service.PostService;
 import sk.uniza.feit.blog.domain.service.TagService;
 import sk.uniza.feit.blog.mapper.PageListMapper;
@@ -19,6 +20,8 @@ import sk.uniza.feit.site.rest.dto.PostRequestDto;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.springframework.http.MediaType.ALL_VALUE;
 
 @RestController
 public class PostController implements BlogRestApi {
@@ -39,10 +42,10 @@ public class PostController implements BlogRestApi {
             method = RequestMethod.POST,
             value = "/api/v1/blog",
             produces = { "application/json" },
-            consumes = { "multipart/form-data", "application/json" }
+            consumes = ALL_VALUE
     )
     ResponseEntity<PostDto> createPost(
-            @RequestBody(required = false) PostRequestDto postRequestDto,
+            @RequestPart(value = "postRequestDto", required = false) PostRequestDto postRequestDto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage
     ) {
 
@@ -56,8 +59,8 @@ public class PostController implements BlogRestApi {
             post.setCreatedAt(LocalDateTime.now());
 
             if (postRequestDto.getTags() != null) {
-                tagService.create(postRequestDto.getTags());
-                post.setTags(postRequestDto.getTags());
+                List<Tag> tags = tagService.create(postRequestDto.getTags());
+                post.setTags(tags);
             }
 
 

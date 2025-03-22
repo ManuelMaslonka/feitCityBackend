@@ -28,9 +28,9 @@ public class Post {
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @OneToMany(targetEntity = Tag.class)
+    @OneToMany(targetEntity = Tag.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "tags")
-    private List<String> tags;
+    private List<Tag> tags;
 
     @Column(name = "main_image")
     private byte[] mainImage;
@@ -38,7 +38,7 @@ public class Post {
     public Post() {
     }
 
-    public Post(Long id, String title, String content, String author, LocalDateTime createdAt, List<String> tags, byte[] mainImage) {
+    public Post(Long id, String title, String content, String author, LocalDateTime createdAt, List<Tag> tags, byte[] mainImage) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -89,11 +89,11 @@ public class Post {
         this.createdAt = createdAt;
     }
 
-    public List<String> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 

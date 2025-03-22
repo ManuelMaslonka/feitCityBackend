@@ -2,6 +2,7 @@ package sk.uniza.feit.blog.domain.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import sk.uniza.feit.blog.domain.AlreadyExistEntity;
 import sk.uniza.feit.blog.domain.Tag;
 import sk.uniza.feit.blog.domain.repository.TagRepository;
 import sk.uniza.feit.site.rest.dto.TagDto;
@@ -18,15 +19,21 @@ public class TagService {
     }
 
     public TagDto create(Tag tag) {
+        boolean exists = tagRepository.existsByName(tag.getName());
+
+        if (exists) {
+            throw new AlreadyExistEntity("Tag with name " + tag.getName() + " already exists");
+        }
+
         return new TagDto(tagRepository.save(tag).getName());
     }
 
-    public void create(List<String> tags) {
-        tags.forEach(tagName -> {
-            Tag tag = new Tag();
-            tag.setName(tagName);
-            tagRepository.save(tag);
+    public List<Tag> create(List<String> tags) {
+        tags.forEach(tag -> {
+            create(new Tag(null, tag));
         });
+
+        return tagRepository.findAllByNameIn(tags);
     }
 
     public List<TagDto> getAllTags() {

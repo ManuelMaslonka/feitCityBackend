@@ -16,9 +16,11 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final TagService tagService;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, TagService tagService) {
         this.postRepository = postRepository;
+        this.tagService = tagService;
     }
 
     // create pageable method, on input is page number and size
@@ -51,8 +53,7 @@ public class PostService {
         // Update the post fields
         existingPost.setTitle(postRequestDto.getTitle());
         existingPost.setContent(postRequestDto.getContent());
-        existingPost.setTags(postRequestDto.getTags());
-
+        existingPost.setTags(tagService.create(postRequestDto.getTags()));
         return postRepository.save(existingPost);
     }
 }
