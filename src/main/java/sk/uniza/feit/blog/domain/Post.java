@@ -3,6 +3,7 @@ package sk.uniza.feit.blog.domain;
 import jakarta.persistence.*;
 import jdk.jfr.Timestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity(name = "Post")
@@ -24,19 +25,20 @@ public class Post {
 
     // Timestamp
     @Timestamp
-    @Column(name = "created_at")
-    private Long createdAt;
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime createdAt;
 
-    @OneToMany(targetEntity = Tags.class)
+    @OneToMany(targetEntity = Tag.class)
     @JoinColumn(name = "tags")
     private List<String> tags;
 
     @Column(name = "main_image")
     private byte[] mainImage;
 
-    public Post() {}
+    public Post() {
+    }
 
-    public Post(Long id, String title, String content, String author, Long createdAt, List<String> tags, byte[] mainImage) {
+    public Post(Long id, String title, String content, String author, LocalDateTime createdAt, List<String> tags, byte[] mainImage) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -78,11 +80,12 @@ public class Post {
         this.author = author;
     }
 
-    public Long getCreatedAt() {
+
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Long createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

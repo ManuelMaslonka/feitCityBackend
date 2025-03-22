@@ -7,7 +7,219 @@ servers:
   - url: http://localhost:8080/
 
 paths:
-#  /api/v1/image:
+
+  /api/v1/blog/tags:
+    get:
+      summary: Find blog posts by tags
+      operationId: getPostsByTags
+      tags:
+        - blog
+      parameters:
+        - name: tagNames
+          in: query
+          description: List of tag names to filter posts by
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        '400':
+          description: Invalid request
+
+  /api/v1/tags:
+    get:
+      summary: Get all tags
+      operationId: getAllTags
+      tags:
+        - tags
+      responses:
+        '200':
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+    post:
+      summary: Create new tag
+      operationId: createTag
+      tags:
+        - tags
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagRequest'
+      responses:
+        '201':
+          description: Tag created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '400':
+          description: Invalid input
+
+  /api/v1/tags/{id}:
+    get:
+      summary: Get tag by ID
+      operationId: getTagById
+      tags:
+        - tags
+      parameters:
+        - name: id
+          in: path
+          description: ID of the tag
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '404':
+          description: Tag not found
+    delete:
+      summary: Delete tag by ID
+      operationId: deleteTagById
+      tags:
+        - tags
+      parameters:
+        - name: id
+          in: path
+          description: ID of the tag
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Tag deleted successfully
+        '404':
+          description: Tag not found
+
+
+  /api/v1/image:
+    get:
+      summary: pageable image list
+      operationId: getAllImages
+      tags:
+        - image
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  format: int64
+                  description: Page number (zero-based)
+                  default: 0
+                size:
+                  type: integer
+                  format: int64
+                  description: Number of items per page
+                  default: 10
+      responses:
+        '200':
+          description: Image list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageListPost'
+    post:
+      summary: Upload image
+      operationId: uploadImage
+      tags:
+        - image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: URL of the uploaded image
+
+  /api/v1/image/{id}:
+    get:
+      summary: get image by id
+      operationId: getImage
+      tags:
+        - image
+      parameters:
+        - name: id
+          in: path
+          description: ID of the image
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Image found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: URL of the image
+        '404':
+          description: Image not found
+
+    delete:
+      summary: delete image by id
+      operationId: deleteImage
+      tags:
+        - image
+      parameters:
+        - name: id
+          in: path
+          description: ID of the image
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Image deleted successfully
+        '404':
+          description: Image not found
+
   /api/v1/blog:
     get:
       summary: Get all blog posts with pagination
@@ -21,6 +233,7 @@ paths:
           required: false
           schema:
             type: integer
+            format: int64
             default: 0
         - name: size
           in: query
@@ -28,6 +241,8 @@ paths:
           required: false
           schema:
             type: integer
+            format: int64
+
             default: 10
       responses:
         '200':
@@ -43,8 +258,26 @@ paths:
         - blog
       requestBody:
         description: Blog post to create
-        required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Title of the blog post
+                content:
+                  type: string
+                  description: Content of the blog post
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: List of tags for the blog post
+                mainImage:
+                  type: string
+                  format: binary
+                  description: Main image for the blog post (base64 encoded)
           application/json:
             schema:
               $ref: '#/components/schemas/PostRequest'
@@ -133,7 +366,7 @@ paths:
         '404':
           description: Post not found
 
-  /authenticate/signup:
+  /api/v1/authenticate/signup:
     post:
       summary: Registrácia nového používateľa
       operationId: signup
@@ -152,7 +385,7 @@ paths:
         '400':
           description: 'Neplatná požiadavka na registráciu používateľa'
 
-  /authenticate/signin:
+  /api/v1/authenticate/signin:
     post:
       summary: Prihlásenie používateľa
       operationId: signin
@@ -986,8 +1219,8 @@ components:
           type: string
           description: Author of the blog post
         createdAt:
-          type: integer
-          format: int64
+          type: string
+          format: date-time
           description: Creation timestamp
         tags:
           type: array
@@ -1016,10 +1249,6 @@ components:
           items:
             type: string
           description: List of tags for the blog post
-        mainImage:
-          type: string
-          format: byte
-          description: Main image for the blog post (base64 encoded)
       required:
         - title
         - content
@@ -1040,3 +1269,25 @@ components:
           type: string
           nullable: true
           description: URL to the next page if available
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the tag
+        name:
+          type: string
+          description: Name of the tag
+      required:
+        - name
+
+    TagRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the tag
+      required:
+        - name

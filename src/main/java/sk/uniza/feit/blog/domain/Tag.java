@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Table
 @Entity
-public class Tags {
+public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,10 +13,10 @@ public class Tags {
     @Column(name = "name")
     private String name;
 
-    public Tags() {
+    public Tag() {
     }
 
-    public Tags(Long id, String name) {
+    public Tag(Long id, String name) {
         this.id = id;
         this.name = name;
     }

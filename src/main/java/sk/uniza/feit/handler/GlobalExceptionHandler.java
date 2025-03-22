@@ -1,5 +1,6 @@
 package sk.uniza.feit.handler;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,4 +15,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorMessage);
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleEntityNotFoundException(EntityNotFoundException e) {
+        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), 404, System.currentTimeMillis());
+        return ResponseEntity.status(404).body(errorMessage);
+    }
 }

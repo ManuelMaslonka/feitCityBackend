@@ -24,7 +24,7 @@ public class JwtUtils {
 
     private String jwtSecret = "f45666c0d61ee85f12c95767f3c27ae4c08711387ada21ab3ba6828a133dd278";
 
-    private int jwtExpirationMs = 864000;
+    private int jwtExpirationMs = 8640000;
 
     public JwtUtils(AccessTokenRepository accessTokenRepository) {
         this.accessTokenRepository = accessTokenRepository;
@@ -73,12 +73,12 @@ public class JwtUtils {
         try {
             boolean isSigned = Jwts.parser().verifyWith(getSigningKey()).build().isSigned(token);
             AccessToken accessToken = accessTokenRepository.findByToken(token);
-            isSigned = accessToken != null;
+            boolean exist = accessToken != null;
+            return isSigned && exist;
         } catch (Exception e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
             return false;
         }
-        return true;
     }
 
     public String getJwtSecret() {
