@@ -29,9 +29,12 @@ public class TagService {
     }
 
     public List<Tag> create(List<String> tags) {
-        tags.forEach(tag -> {
-            create(new Tag(null, tag));
-        });
+        for (String tagName : tags) {
+            // Find existing tag or create a new one
+            if (!tagRepository.existsByName(tagName)) {
+                tagRepository.save(new Tag(null, tagName));
+            }
+        }
 
         return tagRepository.findAllByNameIn(tags);
     }
