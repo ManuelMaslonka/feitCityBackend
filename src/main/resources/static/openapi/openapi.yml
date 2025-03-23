@@ -251,7 +251,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PageListPost'
-
+    post:
+      summary: Create a new blog post
+      description: Creates a new blog post with optional image attachment
+      operationId: createPost
+      tags:
+        - blog
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                postRequestDto:
+                  $ref: "#/components/schemas/PostRequest"
+                mainImage:
+                  type: string
+                  format: binary
+                  description: Main image for the blog post
+        required: true
+      responses:
+        '201':
+          description: Blog post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Bad request - Invalid input data
+        '500':
+          description: Internal server error
 
   /api/v1/blog/{id}:
     get:

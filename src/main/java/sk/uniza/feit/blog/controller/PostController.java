@@ -1,9 +1,8 @@
 package sk.uniza.feit.blog.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import sk.uniza.feit.blog.domain.Post;
 import sk.uniza.feit.blog.domain.Tag;
@@ -21,8 +20,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.springframework.http.MediaType.ALL_VALUE;
-
 @RestController
 public class PostController implements BlogRestApi {
 
@@ -38,31 +35,21 @@ public class PostController implements BlogRestApi {
         this.tagService = tagService;
     }
 
-    @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/api/v1/blog",
-            produces = { "application/json" },
-            consumes = ALL_VALUE
-    )
-    ResponseEntity<PostDto> createPost(
-            @RequestPart(value = "postRequestDto", required = false) PostRequestDto postRequestDto,
-            @RequestPart(value = "mainImage", required = false) MultipartFile mainImage
-    ) {
 
+    @Override
+    public ResponseEntity<PostDto> createPost(PostRequestDto postRequestDto, MultipartFile mainImage) {
         System.out.println("test");
-
         try {
             Post post = new Post();
             post.setTitle(postRequestDto.getTitle());
             post.setContent(postRequestDto.getContent());
-            post.setAuthor(currentUserDetailService.getFullCurrentUser().getName());
+            post.setAuthor("admin");
             post.setCreatedAt(LocalDateTime.now());
 
             if (postRequestDto.getTags() != null) {
                 List<Tag> tags = tagService.create(postRequestDto.getTags());
                 post.setTags(tags);
             }
-
 
 
             if (mainImage != null) {
