@@ -1110,12 +1110,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Tag'
-            type: string
           description: List of tags for the blog post
-        mainImage:
+        mainImageUrl:
           type: string
-          format: byte
-          description: Main image for the blog post (base64 encoded)
+          description: URL to the main image for the blog post
       required:
         - title
         - content

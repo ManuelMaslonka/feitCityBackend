@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import sk.uniza.feit.blog.domain.Post;
 import sk.uniza.feit.blog.domain.Tag;
+import sk.uniza.feit.blog.domain.image.ImageService;
 import sk.uniza.feit.blog.domain.service.PostService;
 import sk.uniza.feit.blog.domain.service.TagService;
 import sk.uniza.feit.blog.mapper.PageListMapper;
@@ -27,12 +28,15 @@ public class PostController implements BlogRestApi {
     private final CurrentUserDetailService currentUserDetailService;
     private final PostMapper postMapper;
     private final TagService tagService;
+    private final ImageService imageService;
 
-    public PostController(PostService postService, CurrentUserDetailService currentUserDetailService, PostMapper postMapper, TagService tagService) {
+    public PostController(PostService postService, CurrentUserDetailService currentUserDetailService, PostMapper postMapper, TagService tagService,
+                          ImageService imageService) {
         this.postService = postService;
         this.currentUserDetailService = currentUserDetailService;
         this.postMapper = postMapper;
         this.tagService = tagService;
+        this.imageService = imageService;
     }
 
 
@@ -53,7 +57,7 @@ public class PostController implements BlogRestApi {
 
 
             if (mainImage != null) {
-                post.setMainImage(mainImage.getBytes());
+                post.setMainImageUrl(imageService.uploadImage(mainImage));
             }
 
             Post savedPost = postService.save(post);

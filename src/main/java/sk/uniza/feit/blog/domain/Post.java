@@ -32,20 +32,20 @@ public class Post {
     @JoinColumn(name = "tags")
     private List<Tag> tags;
 
-    @Column(name = "main_image")
-    private byte[] mainImage;
+    @Column(name = "main_image_url")
+    private String mainImageUrl;
 
     public Post() {
     }
 
-    public Post(Long id, String title, String content, String author, LocalDateTime createdAt, List<Tag> tags, byte[] mainImage) {
+    public Post(Long id, String title, String content, String author, LocalDateTime createdAt, List<Tag> tags, String mainImageUrl) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.author = author;
         this.createdAt = createdAt;
         this.tags = tags;
-        this.mainImage = mainImage;
+        this.mainImageUrl = mainImageUrl;
     }
 
     public Long getId() {
@@ -97,11 +97,11 @@ public class Post {
         this.tags = tags;
     }
 
-    public byte[] getMainImage() {
-        return mainImage;
+    public String getMainImageUrl() {
+        return mainImageUrl;
     }
 
-    public void setMainImage(byte[] mainImage) {
-        this.mainImage = mainImage;
+    public void setMainImageUrl(String mainImageUrl) {
+        this.mainImageUrl = mainImageUrl;
     }
 }
