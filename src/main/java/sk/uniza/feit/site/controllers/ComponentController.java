@@ -49,7 +49,8 @@ public class ComponentController implements ComponentsRestApi {
 
     @Override
     public ResponseEntity<Void> createFeatureBox(FeatureBoxComponentDto featureBoxComponentDto) {
-        return null;
+        componentService.createFeatureBox(featureBoxComponentMapper.toEntity(featureBoxComponentDto));
+        return ResponseEntity.ok().build();
     }
 
     @Override

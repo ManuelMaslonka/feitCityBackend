@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import sk.uniza.feit.blog.domain.AlreadyExistEntity;
 import sk.uniza.feit.blog.domain.Tag;
 import sk.uniza.feit.blog.domain.repository.TagRepository;
+import sk.uniza.feit.blog.mapper.TagMapper;
 import sk.uniza.feit.site.rest.dto.TagDto;
 
 import java.util.List;
@@ -13,9 +14,11 @@ import java.util.List;
 public class TagService {
 
     private final TagRepository tagRepository;
+    private final TagMapper tagMapper;
 
-    public TagService(TagRepository tagRepository) {
+    public TagService(TagRepository tagRepository, TagMapper tagMapper) {
         this.tagRepository = tagRepository;
+        this.tagMapper = tagMapper;
     }
 
     public TagDto create(Tag tag) {
@@ -25,14 +28,16 @@ public class TagService {
             throw new AlreadyExistEntity("Tag with name " + tag.getName() + " already exists");
         }
 
-        return new TagDto(tagRepository.save(tag).getName());
+        Tag save = tagRepository.save(tag);
+
+        return tagMapper.toDto(save);
     }
 
     public List<Tag> create(List<String> tags) {
         for (String tagName : tags) {
             // Find existing tag or create a new one
             if (!tagRepository.existsByName(tagName)) {
-                tagRepository.save(new Tag(null, tagName));
+                tagRepository.save(new Tag(tagName));
             }
         }
 
@@ -41,7 +46,11 @@ public class TagService {
 
     public List<TagDto> getAllTags() {
         return tagRepository.findAll().stream()
-                .map(tag -> new TagDto(tag.getName()))
+                .map(tag -> {
+                    TagDto tagDto = new TagDto(tag.getName());
+                    tagDto.setId(tag.getId());
+                    return tagDto;
+                })
                 .toList();
     }
 

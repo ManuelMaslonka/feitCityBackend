@@ -13,9 +13,7 @@ import sk.uniza.feit.blog.mapper.PageListMapper;
 import sk.uniza.feit.blog.mapper.PostMapper;
 import sk.uniza.feit.security.domain.service.CurrentUserDetailService;
 import sk.uniza.feit.site.rest.api.BlogRestApi;
-import sk.uniza.feit.site.rest.dto.PageListPostDto;
-import sk.uniza.feit.site.rest.dto.PostDto;
-import sk.uniza.feit.site.rest.dto.PostRequestDto;
+import sk.uniza.feit.site.rest.dto.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -39,15 +37,22 @@ public class PostController implements BlogRestApi {
         this.imageService = imageService;
     }
 
+    @Override
+    public ResponseEntity<AddTagsToPost200ResponseDto> addTagsToPost(AddTagsToPostRequestDto addTagsToPostRequestDto) {
+        Post post = postService.findById(addTagsToPostRequestDto.getPostId());
+        List<Tag> tags = tagService.create(addTagsToPostRequestDto.getTagNames());
+        post.setTags(tags);
+        postService.save(post);
+        return ResponseEntity.ok(new AddTagsToPost200ResponseDto().message("Tags added successfully"));
+    }
 
     @Override
     public ResponseEntity<PostDto> createPost(PostRequestDto postRequestDto, MultipartFile mainImage) {
-        System.out.println("test");
         try {
             Post post = new Post();
             post.setTitle(postRequestDto.getTitle());
             post.setContent(postRequestDto.getContent());
-            post.setAuthor("admin");
+            post.setAuthor("admin"); // TODO: replace with current user
             post.setCreatedAt(LocalDateTime.now());
 
             if (postRequestDto.getTags() != null) {

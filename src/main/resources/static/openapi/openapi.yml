@@ -7,6 +7,41 @@ servers:
   - url: http://localhost:8080/
 
 paths:
+  /api/v1/blog/tags/add:
+    post:
+      summary: Add tags to a blog post
+      operationId: addTagsToPost
+      tags:
+        - blog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                postId:
+                  type: integer
+                  format: int64
+                  description: ID of the blog post
+                tagNames:
+                  type: array
+                  items:
+                    type: string
+                  description: List of tag names to add to the post
+      responses:
+        '200':
+          description: Tags added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        '400':
+          description: Invalid request
 
   /api/v1/blog/tags:
     get:
@@ -242,7 +277,6 @@ paths:
           schema:
             type: integer
             format: int64
-
             default: 10
       responses:
         '200':
@@ -399,7 +433,7 @@ paths:
           description: 'Neplatná požiadavka na prihlásenie používateľa'
 
 
-  /authenticate/logout:
+  /api/v1/authenticate/logout:
     post:
       summary: Odhlásenie používateľa
       operationId: logout
@@ -1128,39 +1162,13 @@ components:
           items:
             $ref: '#/components/schemas/Post'
           description: List of posts for the current page
-        totalElements:
+        totalCount:
           type: integer
           format: int64
-          description: Total number of posts
-        totalPages:
-          type: integer
-          format: int32
-          description: Total number of pages
-        size:
-          type: integer
-          format: int32
-          description: Page size
-        number:
-          type: integer
-          format: int32
-          description: Current page number (zero-based)
-        numberOfElements:
-          type: integer
-          format: int32
-          description: Number of elements in current page
-        first:
-          type: boolean
-          description: Whether this is the first page
-        last:
-          type: boolean
-          description: Whether this is the last page
-        empty:
-          type: boolean
-          description: Whether the page is empty
-        nextPage:
+          description: Total number of posts available
+        summaryRow:
           type: string
-          nullable: true
-          description: URL to the next page if available
+          description: Summary row for the posts
 
     SignInResponse:
       type: object

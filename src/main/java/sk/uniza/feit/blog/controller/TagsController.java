@@ -8,6 +8,7 @@ import sk.uniza.feit.site.rest.api.TagsRestApi;
 import sk.uniza.feit.site.rest.dto.TagDto;
 import sk.uniza.feit.site.rest.dto.TagRequestDto;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class TagsController implements TagsRestApi {
 
     @Override
     public ResponseEntity<TagDto> createTag(TagRequestDto tagRequestDto) {
-        return ResponseEntity.ok(tagService.create(new Tag(null, tagRequestDto.getName())));
+        return ResponseEntity.ok(tagService.create(new Tag(tagRequestDto.getName(), Collections.emptyList())));
     }
 
     @Override

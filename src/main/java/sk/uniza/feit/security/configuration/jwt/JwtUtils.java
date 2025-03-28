@@ -5,9 +5,10 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import sk.uniza.feit.user.domain.User;
 import sk.uniza.feit.user.token.AccessToken;
 import sk.uniza.feit.user.token.AccessTokenRepository;
 
@@ -16,22 +17,24 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 
-@Service
+@Component
 public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     private final AccessTokenRepository accessTokenRepository;
 
-    private String jwtSecret = "f45666c0d61ee85f12c95767f3c27ae4c08711387ada21ab3ba6828a133dd278";
+    @Value("${application.security.jwt.secret-key}")
+    private String jwtSecret;
 
-    private int jwtExpirationMs = 8640000;
+    @Value("${application.security.jwt.expiration}")
+    private int jwtExpirationMs;
 
     public JwtUtils(AccessTokenRepository accessTokenRepository) {
         this.accessTokenRepository = accessTokenRepository;
     }
 
     public AccessToken generateJwtToken(Authentication authentication) {
-        UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
+        User userPrincipal = (User) authentication.getPrincipal();
         Date date = new Date((new Date()).getTime() + jwtExpirationMs);
         LocalDateTime expiration = LocalDateTime.now().plusSeconds(jwtExpirationMs / 1000);
 
@@ -47,7 +50,7 @@ public class JwtUtils {
         return sk.uniza.feit.user.token.AccessTokenFactory.create(
                 token,
                 expiration,
-                null
+                userPrincipal.getId()
         );
     }
 

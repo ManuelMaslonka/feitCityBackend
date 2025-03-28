@@ -1,5 +1,6 @@
 package sk.uniza.feit.security.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,9 @@ import java.util.Collections;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Value("${application.security.enable}")
+    private boolean enableSecurity;
+
     private final AuthenticationTokenFilter authenticationTokenFilter;
     private final UserDetailsService userDetailsService;
 
@@ -51,6 +55,10 @@ public class SecurityConfiguration {
     }
 
     private void configureAuthorizationRules(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
+        if (!enableSecurity) {
+            auth.anyRequest().permitAll();
+            return;
+        }
         auth
                 .requestMatchers(
                         "/**",

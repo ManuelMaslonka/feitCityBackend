@@ -12,8 +12,8 @@ public class PageListMapper {
     public static PageListPostDto getPageListPostDto(PageList pageList) {
         PageListPostDto pageListPostDto = new PageListPostDto();
         pageListPostDto.setContent((List) pageList.content());
-        pageListPostDto.totalElements(pageList.totalCount());
-        pageListPostDto.nextPage(pageList.summaryRow().toString());
+        pageListPostDto.totalCount(pageList.totalCount());
+        pageListPostDto.summaryRow(pageList.summaryRow().toString());
         return pageListPostDto;
     }
 

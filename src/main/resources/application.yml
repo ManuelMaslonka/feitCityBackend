@@ -18,9 +18,11 @@ spring:
 
 application:
   name: FeitUniza
-  jwt:
-    secret-key: "f45666c0d61ee85f12c95767f3c27ae4c08711387ada21ab3ba6828a133dd278"
-    expiration: "86400"
+  security:
+    enable: false
+    jwt:
+      secret-key: "f45666c0d61ee85f12c95767f3c27ae4c08711387ada21ab3ba6828a133dd278"
+      expiration: "8640000"
   url:
     base-url: "http://localhost:8080/"
     api-url: "api/v1/"
