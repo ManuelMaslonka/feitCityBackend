@@ -1,5 +1,6 @@
 package sk.uniza.feit.site.controllers;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import sk.uniza.feit.site.domain.components.ComponentService;
@@ -119,7 +120,8 @@ public class ComponentController implements ComponentsRestApi {
 
     @Override
     public ResponseEntity<Void> updateAfterSchoolComponent(AfterSchoolComponentDto afterSchoolComponentDto) {
-        return null;
+        componentService.updateAfterSchoolComponent(afterSchoolComponentMapper.toEntity(afterSchoolComponentDto));
+        return ResponseEntity.ok().build();
     }
 
     @Override
@@ -130,41 +132,49 @@ public class ComponentController implements ComponentsRestApi {
 
     @Override
     public ResponseEntity<Void> updateDODComponent(DODComponentDto doDComponentDto) {
-        return null;
+        componentService.updateDODComponent(dodComponentMapper.toEntity(doDComponentDto));
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> updateFaqComponent(FaqComponentDto faqComponentDto) {
-        return null;
+        componentService.updateFaqComponent(faqComponentMapper.toEntity(faqComponentDto));
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> updateFeitStoryComponent(FeitStoryComponentDto feitStoryComponentDto) {
-        return null;
+        componentService.updateFeitStoryComponent(feitStoryComponentMapper.toEntity(feitStoryComponentDto));
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> updateLogoComponent(LogoComponentDto logoComponentDto) {
-        return null;
+        componentService.updateLogoComponent(logoComponentMapper.toEntity(logoComponentDto));
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> updateOtherActivitiesComponent(OtherActivitiesComponentDto otherActivitiesComponentDto) {
-        return null;
+        componentService.updateOtherActivitiesComponent(otherActivitiesComponentMapper.toEntity(otherActivitiesComponentDto));
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> updateSliderComponent(SliderComponentDto sliderComponentDto) {
-        return null;
+        componentService.updateSliderComponent(sliderComponentMapper.toEntity(sliderComponentDto));
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> updateVideoComponent(VideoComponentDto videoComponentDto) {
-        return null;
+        componentService.updateVideoComponent(videoComponentMapper.toEntity(videoComponentDto));
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> updateWhyFeitComponent(WhyFeitComponentDto whyFeitComponentDto) {
-        return null;
+        componentService.updateWhyFeitComponent(whyFeitComponentMapper.toEntity(whyFeitComponentDto));
+        return ResponseEntity.ok().build();
     }
 }

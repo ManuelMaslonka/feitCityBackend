@@ -40,23 +40,161 @@ public class ComponentService {
     }
 
     public CountdownComponent getComponent() {
-        return countDownRepository.findAll().getFirst();
+        return countDownRepository.findById(1L).orElse(null);
     }
 
     public void updateCountdown(CountdownComponent component) {
-        countDownRepository.save(component);
+        CountdownComponent existingComponent = countDownRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setEndDate(component.getEndDate());
+            existingComponent.setApplicationText(component.getApplicationText());
+            existingComponent.setVisible(component.isVisible());
+            countDownRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            countDownRepository.save(component);
+        }
+    }
+
+    public void updateVideoComponent(VideoComponent component) {
+        VideoComponent existingComponent = videoRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setTitle(component.getTitle());
+            existingComponent.setDescription(component.getDescription());
+            existingComponent.setVideoUrl(component.getVideoUrl());
+            existingComponent.setVisible(component.isVisible());
+            videoRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            videoRepository.save(component);
+        }
+    }
+
+    public void updateWhyFeitComponent(WhyFeitComponent component) {
+        WhyFeitComponent existingComponent = whyFeitRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setTitle(component.getTitle());
+            existingComponent.setWhyFeitLists(component.getWhyFeitLists());
+            existingComponent.setImageUrl(component.getImageUrl());
+            existingComponent.setVideoUrl(component.getVideoUrl());
+            existingComponent.setCountPrograms(component.getCountPrograms());
+            existingComponent.setCountDescription(component.getCountDescription());
+            existingComponent.setAnnualStipend(component.getAnnualStipend());
+            existingComponent.setSalary(component.getSalary());
+            existingComponent.setApplication(component.getApplication());
+            existingComponent.setVisible(component.isVisible());
+            whyFeitRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            whyFeitRepository.save(component);
+        }
+    }
+
+    public void updateDODComponent(DODComponent component) {
+        DODComponent existingComponent = dodRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setTitle(component.getTitle());
+            existingComponent.setButtonText(component.getButtonText());
+            existingComponent.setButtonLink(component.getButtonLink());
+            existingComponent.setVisible(component.isVisible());
+            dodRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            dodRepository.save(component);
+        }
+    }
+
+    public void updateSliderComponent(SliderComponent component) {
+        SliderComponent existingComponent = sliderRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setTitle(component.getTitle());
+            existingComponent.setLabel(component.getLabel());
+            existingComponent.setDescription(component.getDescription());
+            existingComponent.setItems(component.getItems());
+            existingComponent.setVisible(component.isVisible());
+            sliderRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            sliderRepository.save(component);
+        }
+    }
+
+    public void updateFeitStoryComponent(FeitStoryComponent component) {
+        FeitStoryComponent existingComponent = feitStoryRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setTitle(component.getTitle());
+            existingComponent.setVideoItemList(component.getVideoItemList());
+            existingComponent.setVisible(component.isVisible());
+            feitStoryRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            feitStoryRepository.save(component);
+        }
+    }
+
+    public void updateAfterSchoolComponent(AfterSchoolComponent component) {
+        AfterSchoolComponent existingComponent = afterSchoolRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setTitle(component.getTitle());
+            existingComponent.setLabel(component.getLabel());
+            existingComponent.setDescription(component.getDescription());
+            existingComponent.setImageUrl(component.getImageUrl());
+            existingComponent.setImageUrl1(component.getImageUrl1());
+            existingComponent.setVisible(component.getVisible());
+            afterSchoolRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            afterSchoolRepository.save(component);
+        }
+    }
+
+    public void updateLogoComponent(LogoComponent component) {
+        LogoComponent existingComponent = logoRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setLogoItems(component.getLogoItems());
+            existingComponent.setVisible(component.isVisible());
+            logoRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            logoRepository.save(component);
+        }
+    }
+
+    public void updateOtherActivitiesComponent(OtherActivitiesComponent component) {
+        OtherActivitiesComponent existingComponent = otherActivitiesRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setTitle(component.getTitle());
+            existingComponent.setLabel(component.getLabel());
+            existingComponent.setBannerItems(component.getBannerItems());
+            existingComponent.setVisible(component.isVisible());
+            otherActivitiesRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            otherActivitiesRepository.save(component);
+        }
+    }
+
+    public void updateFaqComponent(FaqComponent component) {
+        FaqComponent existingComponent = faqRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setVisible(component.isVisible());
+            faqRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            faqRepository.save(component);
+        }
     }
 
     public VideoComponent getVideoComponent() {
-        return videoRepository.findAll().getFirst();
+        return videoRepository.findById(1L).orElse(null);
     }
 
     public WhyFeitComponent getWhyFeitComponent() {
-        return whyFeitRepository.findAll().getFirst();
+        return whyFeitRepository.findById(1L).orElse(null);
     }
 
     public DODComponent getDODComponent() {
-        return dodRepository.findAll().getFirst();
+        return dodRepository.findById(1L).orElse(null);
     }
 
     public List<FeatureBoxComponent> getFeatureBoxComponents() {
@@ -71,26 +209,43 @@ public class ComponentService {
     }
 
     public SliderComponent getSliderComponent() {
-        return sliderRepository.findAll().getFirst();
+        return sliderRepository.findById(1L).orElse(null);
     }
 
     public FeitStoryComponent getFeitStoryComponent() {
-        return feitStoryRepository.findAll().getFirst();
+        return feitStoryRepository.findById(1L).orElse(null);
     }
 
     public AfterSchoolComponent getAfterSchoolComponent() {
-            return afterSchoolRepository.findAll().getFirst();
-        }
+        return afterSchoolRepository.findById(1L).orElse(null);
+    }
 
     public LogoComponent getLogoComponent() {
-        return logoRepository.findAll().getFirst();
+        return logoRepository.findById(1L).orElse(null);
     }
 
     public OtherActivitiesComponent getOtherActivitiesComponent() {
-        return otherActivitiesRepository.findAll().getFirst();
+        return otherActivitiesRepository.findById(1L).orElse(null);
     }
 
     public FaqComponent getFaqComponent() {
-        return faqRepository.findAll().getFirst();
+        return faqRepository.findById(1L).orElse(null);
+    }
+
+    public void createFeatureBox(FeatureBoxComponent entity) {
+        FeatureBoxComponent component = featureBoxRepository.findById(1L).orElse(null);
+
+        if (component != null) {
+            component.setVisible(entity.isVisible());
+            component.setTitle(entity.getTitle());
+            component.setDescription(entity.getDescription());
+            component.setImageUrl(entity.getImageUrl());
+            component.setLink(entity.getLink());
+            featureBoxRepository.save(component);
+        } else {
+            // create new component
+            entity.setId(1L);
+            featureBoxRepository.save(entity);
+        }
     }
 }

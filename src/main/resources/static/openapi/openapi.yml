@@ -1091,7 +1091,6 @@ components:
           description: Alternative text flag
       required:
         - imageUrl
-        - alt
 
     OtherActivitiesComponent:
       type: object
