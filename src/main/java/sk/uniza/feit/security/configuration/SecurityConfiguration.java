@@ -61,7 +61,6 @@ public class SecurityConfiguration {
         }
         auth
                 .requestMatchers(
-                        "/**",
                         "/api/v1/images/**",
                         "/api/v1/authenticate/**",
                         "/api/v1/components/**",
