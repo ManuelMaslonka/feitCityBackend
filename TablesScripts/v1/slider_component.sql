@@ -11,4 +11,4 @@ create table slider_component
 alter table slider_component
     owner to postgres;
 
-INSERT INTO public.slider_component (id, description, label, title, visible) VALUES (1, 'Okrem kvalitného vzdelania ti ponúkame aj super študentský život. Život, ktorý patrí k nádherným študentským rokom', 'Študentský život', 'Život na FEIT', true);
+INSERT INTO public.slider_component (id, description, label, title, visible) VALUES (1, 'Okrem kvalitného vzdelania ti ponúkame aj super študentský život. Život, ktorý patrí k nádherným študentským rokom', 'Študentský život', 'Život na FEIT', false);
