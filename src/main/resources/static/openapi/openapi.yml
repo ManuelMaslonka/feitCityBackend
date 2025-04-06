@@ -697,9 +697,17 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/WhyFeitComponent'
+              type: object
+              properties:
+                whyFeitComponentDto:
+                  $ref: '#/components/schemas/WhyFeitComponent'
+                  description: WhyFeit component data as JSON object
+                image:
+                  type: string
+                  format: binary
+                  description: Image file to upload
       responses:
         '200':
           description: WhyFeit component updated

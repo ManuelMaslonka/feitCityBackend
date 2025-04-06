@@ -1,10 +1,12 @@
 package sk.uniza.feit.site.controllers;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import sk.uniza.feit.blog.domain.image.ImageService;
 import sk.uniza.feit.site.domain.components.ComponentService;
 import sk.uniza.feit.site.domain.components.models.CountdownComponent;
+import sk.uniza.feit.site.domain.components.models.WhyFeitComponent;
 import sk.uniza.feit.site.mappers.*;
 import sk.uniza.feit.site.rest.api.ComponentsRestApi;
 import sk.uniza.feit.site.rest.dto.*;
@@ -28,12 +30,15 @@ public class ComponentController implements ComponentsRestApi {
     private final LogoComponentMapper logoComponentMapper;
     private final OtherActivitiesComponentMapper otherActivitiesComponentMapper;
     private final FaqComponentMapper faqComponentMapper;
+    private final ImageService imageService;
 
     public ComponentController(ComponentService componentService, VideoComponentMapper videoComponentMapper, CountdownComponentMapper countdownComponentMapper,
-                               WhyFeitComponentMapper whyFeitComponentMapper, DODComponentMapper dodComponentMapperConst, FeatureBoxComponentMapper featureBoxComponentMapper,
+                               WhyFeitComponentMapper whyFeitComponentMapper, DODComponentMapper dodComponentMapperConst,
+                               FeatureBoxComponentMapper featureBoxComponentMapper,
                                SliderComponentMapper sliderComponentMapper, FeitStoryComponentMapper feitStoryComponentMapper,
                                AfterSchoolComponentMapper afterSchoolComponentMapper, LogoComponentMapper logoComponentMapper,
-                               OtherActivitiesComponentMapper otherActivitiesComponentMapper, FaqComponentMapper faqComponentMapper) {
+                               OtherActivitiesComponentMapper otherActivitiesComponentMapper, FaqComponentMapper faqComponentMapper,
+                               ImageService imageService) {
         this.componentService = componentService;
         this.videoComponentMapper = videoComponentMapper;
         this.countdownComponentMapper = countdownComponentMapper;
@@ -46,6 +51,7 @@ public class ComponentController implements ComponentsRestApi {
         this.logoComponentMapper = logoComponentMapper;
         this.otherActivitiesComponentMapper = otherActivitiesComponentMapper;
         this.faqComponentMapper = faqComponentMapper;
+        this.imageService = imageService;
     }
 
     @Override
@@ -173,8 +179,22 @@ public class ComponentController implements ComponentsRestApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateWhyFeitComponent(WhyFeitComponentDto whyFeitComponentDto) {
-        componentService.updateWhyFeitComponent(whyFeitComponentMapper.toEntity(whyFeitComponentDto));
+    public ResponseEntity<Void> updateWhyFeitComponent(WhyFeitComponentDto whyFeitComponentDto, MultipartFile image) {
+
+        WhyFeitComponent entity = whyFeitComponentMapper.toEntity(whyFeitComponentDto);
+
+        try {
+            if (image != null && !image.isEmpty()) {
+                String imagePath = imageService.uploadImageForComponent(image);
+                entity.setImageUrl(imagePath);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error processing image data", e);
+        }
+
+
+        componentService.updateWhyFeitComponent(entity);
         return ResponseEntity.ok().build();
     }
+
 }

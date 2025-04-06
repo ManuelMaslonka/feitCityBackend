@@ -1,14 +1,23 @@
 package sk.uniza.feit.site.domain.components;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sk.uniza.feit.site.domain.components.models.*;
 import sk.uniza.feit.site.domain.components.repository.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ComponentService {
+
+    @Value("${application.image.base-url}")
+    private String imageBaseUrl;
+
+    @Value("${application.url.base-url}")
+    private String baseUrl;
+
+    @Value("${application.url.api-url}")
+    private String apiUrl;
 
     private final CountDownRepository countDownRepository;
     private final VideoRepository videoRepository;
@@ -190,7 +199,13 @@ public class ComponentService {
     }
 
     public WhyFeitComponent getWhyFeitComponent() {
-        return whyFeitRepository.findById(1L).orElse(null);
+        WhyFeitComponent whyFeitComponent = whyFeitRepository.findById(1L).orElse(null);
+        whyFeitComponent.setImageUrl(createUrlFromImagePath(whyFeitComponent.getImageUrl()));
+        return whyFeitComponent;
+    }
+
+    private String createUrlFromImagePath(String imageUrl) {
+        return baseUrl + apiUrl + this.imageBaseUrl + imageUrl;
     }
 
     public DODComponent getDODComponent() {
@@ -198,9 +213,15 @@ public class ComponentService {
     }
 
     public List<FeatureBoxComponent> getFeatureBoxComponents() {
-        return featureBoxRepository.findAll().stream().sorted(
+        List<FeatureBoxComponent> list = featureBoxRepository.findAll().stream().sorted(
                 (f1, f2) -> f1.getId().compareTo(f2.getId())
         ).toList();
+
+        for (FeatureBoxComponent component : list) {
+            component.setImageUrl(createUrlFromImagePath(component.getImageUrl()));
+        }
+
+        return list;
     }
 
     public boolean getFeatureBoxVisibility() {
@@ -209,19 +230,35 @@ public class ComponentService {
     }
 
     public SliderComponent getSliderComponent() {
-        return sliderRepository.findById(1L).orElse(null);
+        SliderComponent sliderComponent = sliderRepository.findById(1L).orElse(null);
+
+        sliderComponent.getItems().forEach(
+                sliderItem -> sliderItem.setImageUrl(createUrlFromImagePath(sliderItem.getImageUrl()))
+        );
+
+        return sliderComponent;
     }
 
     public FeitStoryComponent getFeitStoryComponent() {
-        return feitStoryRepository.findById(1L).orElse(null);
+        FeitStoryComponent feitStoryComponent = feitStoryRepository.findById(1L).orElse(null);
+        feitStoryComponent.getVideoItemList().forEach(
+                videoItem -> videoItem.setImageUrl(createUrlFromImagePath(videoItem.getImageUrl()))
+        );
+        return feitStoryComponent;
     }
 
     public AfterSchoolComponent getAfterSchoolComponent() {
-        return afterSchoolRepository.findById(1L).orElse(null);
+        AfterSchoolComponent afterSchoolComponent = afterSchoolRepository.findById(1L).orElse(null);
+        afterSchoolComponent.setImageUrl(createUrlFromImagePath(afterSchoolComponent.getImageUrl()));
+        afterSchoolComponent.setImageUrl1(createUrlFromImagePath(afterSchoolComponent.getImageUrl1()));
+        return afterSchoolComponent;
     }
 
     public LogoComponent getLogoComponent() {
-        return logoRepository.findById(1L).orElse(null);
+        LogoComponent logoComponent = logoRepository.findById(1L).orElse(null);
+        logoComponent.getLogoItems()
+                .forEach(logoItem -> logoItem.setImageUrl(createUrlFromImagePath(logoItem.getImageUrl())));
+        return logoComponent;
     }
 
     public OtherActivitiesComponent getOtherActivitiesComponent() {

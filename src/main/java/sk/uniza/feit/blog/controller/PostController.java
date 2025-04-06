@@ -22,6 +22,7 @@ import java.util.List;
 @RestController
 public class PostController implements BlogRestApi {
 
+
     private final PostService postService;
     private final CurrentUserDetailService currentUserDetailService;
     private final PostMapper postMapper;

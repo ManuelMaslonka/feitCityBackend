@@ -46,6 +46,26 @@ public class ImageService {
         this.imageRepository = imageRepository;
     }
 
+    public String uploadImageForComponent(MultipartFile file) throws IOException {
+        Path directory =createDirectory("feitImages");
+        String originalFilename = file.getOriginalFilename();
+        String extension = getFileExtension(originalFilename);
+
+        byte[] compressedImage = compressImage(file, extension);
+
+        Path targatPath = directory.resolve(originalFilename);
+        Files.write(targatPath, compressedImage);
+        String relativePath = String.format("%s/%s", "feitImages", originalFilename);
+        Image image = new Image(
+                null,
+                file.getOriginalFilename(),
+                file.getContentType(),
+                relativePath
+        );
+        imageRepository.save(image);
+        return relativePath;
+    }
+
     public String uploadImage(MultipartFile file) throws IOException {
         Path directory = createDirectory(getYearMothFormatted());
         String originalFilename = file.getOriginalFilename();
@@ -111,6 +131,12 @@ public class ImageService {
 
     private static Path createDirectory(YearMothFormatted result) throws IOException {
         Path targetDirectory = Paths.get(IMAGE_PATH_REL, result.year(), result.month());
+        Files.createDirectories(targetDirectory);
+        return targetDirectory;
+    }
+
+    private static Path createDirectory(String name) throws IOException {
+        Path targetDirectory = Paths.get(IMAGE_PATH_REL, name);
         Files.createDirectories(targetDirectory);
         return targetDirectory;
     }
