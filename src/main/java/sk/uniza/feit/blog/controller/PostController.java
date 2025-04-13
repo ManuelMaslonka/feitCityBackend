@@ -93,8 +93,9 @@ public class PostController implements BlogRestApi {
     }
 
     @Override
-    public ResponseEntity<List<PostDto>> getPostsByTags(List<String> tagNames) {
-        return ResponseEntity.ok(postMapper.toDto(postService.findByTags(tagNames)));
+    public ResponseEntity<PageListPostDto> getPostsByTags(List<String> tagNames, Long page, Long size) {
+        PageListPostDto pageListPostDto = PageListMapper.getPageListPostDto(postService.findAllByTags(tagNames, page, size));
+        return ResponseEntity.ok(pageListPostDto);
     }
 
     @Override

@@ -60,15 +60,29 @@ paths:
               type: string
           style: form
           explode: true
+        - name: page
+          in: query
+          description: Page number (zero-based)
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 0
+        - name: size
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 10
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Post'
+                $ref: '#/components/schemas/PageListPost'
         '400':
           description: Invalid request
 
@@ -703,7 +717,6 @@ paths:
               properties:
                 whyFeitComponentDto:
                   $ref: '#/components/schemas/WhyFeitComponent'
-                  description: WhyFeit component data as JSON object
                 image:
                   type: string
                   format: binary

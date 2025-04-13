@@ -56,4 +56,10 @@ public class PostService {
         existingPost.setTags(tagService.create(postRequestDto.getTags()));
         return postRepository.save(existingPost);
     }
+
+    public PageList<Post> findAllByTags(List<String> tagNames, Long page, Long size) {
+        Pageable pageable = PageRequest.of(page.intValue(), size.intValue()).withSort(Sort.by("createdAt").descending());
+        Page<Post> posts = postRepository.findAllByTags(tagNames, pageable);
+        return new PageList<>(posts.getContent(), posts.getTotalElements(), posts.hasNext());
+    }
 }
