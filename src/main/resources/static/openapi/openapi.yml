@@ -7,6 +7,34 @@ servers:
   - url: http://localhost:8080/
 
 paths:
+  /api/v1/components/footer:
+    get:
+      summary: Get footer component data
+      operationId: getFooterComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: Footer component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Footer'
+    put:
+      summary: Update footer component data
+      operationId: updateFooterComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Footer'
+      responses:
+        '200':
+          description: Footer component updated
+
   /api/v1/blog/tags/add:
     post:
       summary: Add tags to a blog post
@@ -781,9 +809,134 @@ paths:
         '200':
           description: Video component updated
 
+  /api/v1/components/menu:
+    get:
+      summary: Get menu component data
+      operationId: getMenuComponent
+      tags:
+        - Components
+      responses:
+        '200':
+          description: Menu component data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuComponent'
+    post:
+      summary: Update menu component data
+      operationId: updateMenuComponent
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuComponent'
+      responses:
+        '200':
+          description: Menu component updated
+
 
 components:
   schemas:
+
+    MenuComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the menu component
+        visible:
+          type: boolean
+          description: Whether the menu component is visible
+        menuItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/MenuItem'
+          description: List of menu items
+        dropdownMenuItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropDownMenuItem'
+          description: List of dropdown menu items
+        button:
+          $ref: '#/components/schemas/Button'
+          description: Button for the menu component
+      required:
+        - visible
+        - menuItems
+        - dropdownMenuItems
+
+    MenuItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the menu item
+        text:
+          type: string
+          description: The text to display for the menu item
+        url:
+          type: string
+          description: The URL the menu item links to
+      required:
+        - text
+        - url
+
+    Button:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the button
+        text:
+          type: string
+          description: The text to display on the button
+        url:
+          type: string
+          description: The URL the button links to
+      required:
+        - text
+        - url
+
+    DropDownMenuItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the dropdown menu item
+        text:
+          type: string
+          description: The text to display for the dropdown menu item
+        url:
+          type: string
+          description: The URL the dropdown menu item links to
+        dropdownMenuItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropDownMenuItems'
+          description: List of menu items in the dropdown
+      required:
+        - text
+        - url
+
+    DropDownMenuItems:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the dropdown menu items
+        url:
+          type: string
+          description: The URL the dropdown menu items links to
+        text:
+          type: string
+          description: The text to display for the dropdown menu items
+      required:
+        - url
+        - text
+
     FeatureBoxComponent:
       type: object
       properties:
@@ -1348,3 +1501,131 @@ components:
       required:
         - name
 
+    Footer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the footer component
+        locationColumn:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocationColumn'
+          description: List of location column items
+        contactColumn:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactColumn'
+          description: List of contact column items
+        socialColumn:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialColumn'
+          description: List of social column items
+        shopColumn:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopColumn'
+          description: List of shop column items
+        navigationColumn:
+          type: array
+          items:
+            $ref: '#/components/schemas/NavigationColumn'
+          description: List of navigation column items
+      required:
+        - id
+        - locationColumn
+        - contactColumn
+        - socialColumn
+        - shopColumn
+        - navigationColumn
+
+    LocationColumn:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the location column item
+        text:
+          type: string
+          description: Text content for the location item
+        url:
+          type: string
+          description: URL associated with the location item
+      required:
+        - text
+        - url
+
+    ContactColumn:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the contact column item
+        text:
+          type: string
+          description: Text content for the contact item
+        url:
+          type: string
+          description: URL associated with the contact item
+      required:
+        - text
+        - url
+
+    SocialColumn:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the social column item
+        text:
+          type: string
+          description: Text content for the social item
+        url:
+          type: string
+          description: URL associated with the social item
+        icon:
+          type: string
+          description: Icon for the social item
+      required:
+        - text
+        - url
+        - icon
+
+    ShopColumn:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the shop column item
+        text:
+          type: string
+          description: Text content for the shop item
+        url:
+          type: string
+          description: URL associated with the shop item
+      required:
+        - text
+        - url
+
+    NavigationColumn:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the navigation column item
+        text:
+          type: string
+          description: Text content for the navigation item
+        url:
+          type: string
+          description: URL associated with the navigation item
+      required:
+        - text
+        - url

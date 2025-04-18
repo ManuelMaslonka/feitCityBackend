@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sk.uniza.feit.blog.domain.image.ImageService;
 import sk.uniza.feit.site.domain.components.ComponentService;
 import sk.uniza.feit.site.domain.components.models.CountdownComponent;
+import sk.uniza.feit.site.domain.components.models.MenuComponent;
 import sk.uniza.feit.site.domain.components.models.WhyFeitComponent;
 import sk.uniza.feit.site.mappers.*;
 import sk.uniza.feit.site.rest.api.ComponentsRestApi;
@@ -31,6 +32,8 @@ public class ComponentController implements ComponentsRestApi {
     private final OtherActivitiesComponentMapper otherActivitiesComponentMapper;
     private final FaqComponentMapper faqComponentMapper;
     private final ImageService imageService;
+    private final MenuComponentMapper menuComponentMapper;
+    private final FooterMapper footerMapper;
 
     public ComponentController(ComponentService componentService, VideoComponentMapper videoComponentMapper, CountdownComponentMapper countdownComponentMapper,
                                WhyFeitComponentMapper whyFeitComponentMapper, DODComponentMapper dodComponentMapperConst,
@@ -38,7 +41,8 @@ public class ComponentController implements ComponentsRestApi {
                                SliderComponentMapper sliderComponentMapper, FeitStoryComponentMapper feitStoryComponentMapper,
                                AfterSchoolComponentMapper afterSchoolComponentMapper, LogoComponentMapper logoComponentMapper,
                                OtherActivitiesComponentMapper otherActivitiesComponentMapper, FaqComponentMapper faqComponentMapper,
-                               ImageService imageService) {
+                               ImageService imageService, MenuComponentMapper menuComponentMapper,
+                               FooterMapper footerMapper) {
         this.componentService = componentService;
         this.videoComponentMapper = videoComponentMapper;
         this.countdownComponentMapper = countdownComponentMapper;
@@ -52,6 +56,8 @@ public class ComponentController implements ComponentsRestApi {
         this.otherActivitiesComponentMapper = otherActivitiesComponentMapper;
         this.faqComponentMapper = faqComponentMapper;
         this.imageService = imageService;
+        this.menuComponentMapper = menuComponentMapper;
+        this.footerMapper = footerMapper;
     }
 
     @Override
@@ -100,8 +106,22 @@ public class ComponentController implements ComponentsRestApi {
     }
 
     @Override
+    public ResponseEntity<FooterDto> getFooterComponent() {
+        return ResponseEntity.ok(footerMapper.toDto(componentService.getFooterComponent()));
+    }
+
+    @Override
     public ResponseEntity<LogoComponentDto> getLogoComponent() {
         return ResponseEntity.ok(logoComponentMapper.toDto(componentService.getLogoComponent()));
+    }
+
+    @Override
+    public ResponseEntity<MenuComponentDto> getMenuComponent() {
+        MenuComponent menuComponent = componentService.getMenuComponent();
+        if (menuComponent == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(menuComponentMapper.toDto(menuComponent));
     }
 
     @Override
@@ -155,8 +175,21 @@ public class ComponentController implements ComponentsRestApi {
     }
 
     @Override
+    public ResponseEntity<Void> updateFooterComponent(FooterDto footerDto) {
+        componentService.updateFooterComponent(footerMapper.toEntity(footerDto));
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
     public ResponseEntity<Void> updateLogoComponent(LogoComponentDto logoComponentDto) {
         componentService.updateLogoComponent(logoComponentMapper.toEntity(logoComponentDto));
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> updateMenuComponent(MenuComponentDto menuComponentDto) {
+        MenuComponent entity = menuComponentMapper.toEntity(menuComponentDto);
+        componentService.updateMenuComponent(entity);
         return ResponseEntity.ok().build();
     }
 

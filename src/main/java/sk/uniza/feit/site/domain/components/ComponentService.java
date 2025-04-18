@@ -10,6 +10,7 @@ import java.util.List;
 @Service
 public class ComponentService {
 
+    private final FooterRepository footerRepository;
     @Value("${application.image.base-url}")
     private String imageBaseUrl;
 
@@ -30,11 +31,13 @@ public class ComponentService {
     private final LogoRepository logoRepository;
     private final OtherActivitiesRepository otherActivitiesRepository;
     private final FaqRepository faqRepository;
+    private final MenuRepository menuRepository;
 
     public ComponentService(CountDownRepository countDownRepository, VideoRepository videoRepository, WhyFeitRepository whyFeitRepository,
                             DODRepository dodRepository, FeatureBoxRepository featureBoxRepository, SliderRepository sliderRepository,
                             FeitStoryRepository feitStoryRepository, AfterSchoolRepository afterSchoolRepository, LogoRepository logoRepository,
-                            OtherActivitiesRepository otherActivitiesRepository, FaqRepository faqRepository) {
+                            OtherActivitiesRepository otherActivitiesRepository, FaqRepository faqRepository, MenuRepository menuRepository,
+                            FooterRepository footerRepository) {
         this.countDownRepository = countDownRepository;
         this.videoRepository = videoRepository;
         this.whyFeitRepository = whyFeitRepository;
@@ -46,6 +49,8 @@ public class ComponentService {
         this.logoRepository = logoRepository;
         this.otherActivitiesRepository = otherActivitiesRepository;
         this.faqRepository = faqRepository;
+        this.menuRepository = menuRepository;
+        this.footerRepository = footerRepository;
     }
 
     public CountdownComponent getComponent() {
@@ -269,6 +274,23 @@ public class ComponentService {
         return faqRepository.findById(1L).orElse(null);
     }
 
+    public MenuComponent getMenuComponent() {
+        return menuRepository.findById(1L).orElse(null);
+    }
+
+    public void updateMenuComponent(MenuComponent component) {
+        MenuComponent existingComponent = menuRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setVisible(component.isVisible());
+            existingComponent.setMenuItems(component.getMenuItems());
+            existingComponent.setDropdownMenuItems(component.getDropdownMenuItems());
+            menuRepository.save(existingComponent);
+        } else {
+            component.setId(1L);
+            menuRepository.save(component);
+        }
+    }
+
     public void createFeatureBox(FeatureBoxComponent entity) {
         FeatureBoxComponent component = featureBoxRepository.findById(1L).orElse(null);
 
@@ -284,5 +306,28 @@ public class ComponentService {
             entity.setId(1L);
             featureBoxRepository.save(entity);
         }
+    }
+
+    public void updateFooterComponent(Footer entity) {
+
+        Footer existingComponent = footerRepository.findById(1L).orElse(null);
+        if (existingComponent != null) {
+            existingComponent.setLocationColumn(entity.getLocationColumn());
+            existingComponent.setContactColumn(entity.getContactColumn());
+            existingComponent.setSocialColumn(entity.getSocialColumn());
+            existingComponent.setShopColumn(entity.getShopColumn());
+            existingComponent.setNavigationColumn(entity.getNavigationColumn());
+            footerRepository.save(existingComponent);
+        } else {
+            entity.setId(1L);
+            footerRepository.save(entity);
+        }
+
+    }
+
+    public Footer getFooterComponent() {
+
+        return footerRepository.findById(1L).orElse(null);
+
     }
 }

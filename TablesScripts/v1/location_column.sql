@@ -1,0 +1,15 @@
+create table location_column
+(
+    id        bigint not null
+        primary key,
+    text      varchar(255),
+    url       varchar(255),
+    footer_id bigint
+        constraint fkl1l9fhniqc17mkl77bh3hrl13
+            references footer
+);
+
+alter table location_column
+    owner to postgres;
+
+INSERT INTO public.location_column (id, text, url, footer_id) VALUES (1, 'Univerzitná 1, 010 26, Žilina', 'https://maps.app.goo.gl/rBPcafuZjeBnVTDP6', 1);
