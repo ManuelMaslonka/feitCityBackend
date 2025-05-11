@@ -16,23 +16,23 @@ public class WhyFeitComponent {
     @Column(name = "visible")
     private boolean visible;
 
-    @Column(name = "title")
+    @Column(name = "title", length = 1024) // Increased length
     private String title;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "why_feit_component_id")
     private List<WhyFeitList> whyFeitLists;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", length = 2048) // Increased length for URLs
     private String imageUrl;
 
-    @Column(name = "video_url")
+    @Column(name = "video_url", length = 2048) // Increased length for URLs
     private String videoUrl;
 
-    @Column(name = "countPrograms")
+    @Column(name = "countPrograms") // Removed length = 1000 as it's an int
     private int countPrograms;
 
-    @Column(name = "countDescription")
+    @Column(name = "countDescription", columnDefinition = "TEXT") // Changed to TEXT for potentially long descriptions
     private String countDescription;
 
     @Column(name = "annualStipend")
@@ -41,7 +41,7 @@ public class WhyFeitComponent {
     @Column(name = "salary")
     private int salary;
 
-    @Column(name = "application")
+    @Column(name = "application", columnDefinition = "TEXT") // Changed to TEXT or increased length
     private String application;
 
     public WhyFeitComponent() {
