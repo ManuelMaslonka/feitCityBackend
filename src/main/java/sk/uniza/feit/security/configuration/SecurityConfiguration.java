@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -60,10 +61,11 @@ public class SecurityConfiguration {
             return;
         }
         auth
+                .requestMatchers(HttpMethod.GET, "/api/v1/components/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/components/**").authenticated()
                 .requestMatchers(
                         "/api/v1/images/**",
                         "/api/v1/authenticate/**",
-                        "/api/v1/components/**",
                         "/v2/api-docs",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
