@@ -61,8 +61,8 @@ public class SecurityConfiguration {
             return;
         }
         auth
-                .requestMatchers(HttpMethod.GET, "/api/v1/components/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/components/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/components/**", "api/v1/image/**", "api/v1/blog/**").authenticated()
                 .requestMatchers(
                         "/api/v1/images/**",
                         "/api/v1/authenticate/**",
