@@ -20,7 +20,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Footer'
-    put:
+    post:
       summary: Update footer component data
       operationId: updateFooterComponent
       tags:
@@ -382,7 +382,7 @@ paths:
         '404':
           description: Post not found
 
-    put:
+    post:
       summary: Update a blog post
       operationId: updatePost
       tags:
@@ -499,7 +499,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FaqComponent'
-    put:
+    post:
       summary: Update FAQ component data
       operationId: updateFaqComponent
       tags:
@@ -527,7 +527,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OtherActivitiesComponent'
-    put:
+    post:
       summary: Update other activities component data
       operationId: updateOtherActivitiesComponent
       tags:
@@ -555,7 +555,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogoComponent'
-    put:
+    post:
       summary: Update logo component data
       operationId: updateLogoComponent
       tags:
@@ -583,7 +583,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AfterSchoolComponent'
-    put:
+    post:
       summary: Update after school component data
       operationId: updateAfterSchoolComponent
       tags:
@@ -611,7 +611,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FeitStoryComponent'
-    put:
+    post:
       summary: Update FEIT Story component data
       operationId: updateFeitStoryComponent
       tags:
@@ -639,7 +639,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SliderComponent'
-    put:
+    post:
       summary: Update SliderComponent
       operationId: updateSliderComponent
       tags:
@@ -739,16 +739,9 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
-              type: object
-              properties:
-                whyFeitComponentDto:
-                  $ref: '#/components/schemas/WhyFeitComponent'
-                image:
-                  type: string
-                  format: binary
-                  description: Image file to upload
+              $ref: '#/components/schemas/WhyFeitComponent'
       responses:
         '200':
           description: WhyFeit component updated

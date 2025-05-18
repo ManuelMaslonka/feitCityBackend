@@ -2,15 +2,38 @@ package sk.uniza.feit.site.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import sk.uniza.feit.blog.domain.image.ImageService;
 import sk.uniza.feit.site.domain.components.ComponentService;
 import sk.uniza.feit.site.domain.components.models.CountdownComponent;
 import sk.uniza.feit.site.domain.components.models.MenuComponent;
 import sk.uniza.feit.site.domain.components.models.WhyFeitComponent;
-import sk.uniza.feit.site.mappers.*;
+import sk.uniza.feit.site.mappers.AfterSchoolComponentMapper;
+import sk.uniza.feit.site.mappers.CountdownComponentMapper;
+import sk.uniza.feit.site.mappers.FaqComponentMapper;
+import sk.uniza.feit.site.mappers.FeatureBoxComponentMapper;
+import sk.uniza.feit.site.mappers.FeitStoryComponentMapper;
+import sk.uniza.feit.site.mappers.FooterMapper;
+import sk.uniza.feit.site.mappers.LogoComponentMapper;
+import sk.uniza.feit.site.mappers.MenuComponentMapper;
+import sk.uniza.feit.site.mappers.OtherActivitiesComponentMapper;
+import sk.uniza.feit.site.mappers.SliderComponentMapper;
+import sk.uniza.feit.site.mappers.VideoComponentMapper;
+import sk.uniza.feit.site.mappers.WhyFeitComponentMapper;
 import sk.uniza.feit.site.rest.api.ComponentsRestApi;
-import sk.uniza.feit.site.rest.dto.*;
+import sk.uniza.feit.site.rest.dto.AfterSchoolComponentDto;
+import sk.uniza.feit.site.rest.dto.CountdownComponentDto;
+import sk.uniza.feit.site.rest.dto.DODComponentDto;
+import sk.uniza.feit.site.rest.dto.FaqComponentDto;
+import sk.uniza.feit.site.rest.dto.FeatureBoxComponentDto;
+import sk.uniza.feit.site.rest.dto.FeitStoryComponentDto;
+import sk.uniza.feit.site.rest.dto.FooterDto;
+import sk.uniza.feit.site.rest.dto.GetFeatureBoxs200ResponseDto;
+import sk.uniza.feit.site.rest.dto.LogoComponentDto;
+import sk.uniza.feit.site.rest.dto.MenuComponentDto;
+import sk.uniza.feit.site.rest.dto.OtherActivitiesComponentDto;
+import sk.uniza.feit.site.rest.dto.SliderComponentDto;
+import sk.uniza.feit.site.rest.dto.VideoComponentDto;
+import sk.uniza.feit.site.rest.dto.WhyFeitComponentDto;
 import sk.uniza.feit.site.utills.DateTimeConverter;
 
 import java.util.List;
@@ -152,7 +175,7 @@ public class ComponentController implements ComponentsRestApi {
 
     @Override
     public ResponseEntity<Void> updateCountdownComponent(CountdownComponentDto countdownComponentDto) {
-        componentService.updateCountdown(countdownComponentMapper.toEntity(countdownComponentDto));
+        componentService.updateCountdown(countdownComponentMapper.mapToEntity(countdownComponentDto));
         return ResponseEntity.ok().build();
     }
 
@@ -212,20 +235,8 @@ public class ComponentController implements ComponentsRestApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateWhyFeitComponent(WhyFeitComponentDto whyFeitComponentDto, MultipartFile image) {
-
+    public ResponseEntity<Void> updateWhyFeitComponent(WhyFeitComponentDto whyFeitComponentDto) {
         WhyFeitComponent entity = whyFeitComponentMapper.toEntity(whyFeitComponentDto);
-
-        try {
-            if (image != null && !image.isEmpty()) {
-                String imagePath = imageService.uploadImageForComponent(image);
-                entity.setImageUrl(imagePath);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Error processing image data", e);
-        }
-
-
         componentService.updateWhyFeitComponent(entity);
         return ResponseEntity.ok().build();
     }
