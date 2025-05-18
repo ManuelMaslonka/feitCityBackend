@@ -2,8 +2,32 @@ package sk.uniza.feit.site.domain.components;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import sk.uniza.feit.site.domain.components.models.*;
-import sk.uniza.feit.site.domain.components.repository.*;
+import sk.uniza.feit.site.domain.components.models.AfterSchoolComponent;
+import sk.uniza.feit.site.domain.components.models.CountdownComponent;
+import sk.uniza.feit.site.domain.components.models.DODComponent;
+import sk.uniza.feit.site.domain.components.models.FaqComponent;
+import sk.uniza.feit.site.domain.components.models.FeatureBoxComponent;
+import sk.uniza.feit.site.domain.components.models.FeitStoryComponent;
+import sk.uniza.feit.site.domain.components.models.Footer;
+import sk.uniza.feit.site.domain.components.models.LogoComponent;
+import sk.uniza.feit.site.domain.components.models.MenuComponent;
+import sk.uniza.feit.site.domain.components.models.OtherActivitiesComponent;
+import sk.uniza.feit.site.domain.components.models.SliderComponent;
+import sk.uniza.feit.site.domain.components.models.VideoComponent;
+import sk.uniza.feit.site.domain.components.models.WhyFeitComponent;
+import sk.uniza.feit.site.domain.components.repository.AfterSchoolRepository;
+import sk.uniza.feit.site.domain.components.repository.CountDownRepository;
+import sk.uniza.feit.site.domain.components.repository.DODRepository;
+import sk.uniza.feit.site.domain.components.repository.FaqRepository;
+import sk.uniza.feit.site.domain.components.repository.FeatureBoxRepository;
+import sk.uniza.feit.site.domain.components.repository.FeitStoryRepository;
+import sk.uniza.feit.site.domain.components.repository.FooterRepository;
+import sk.uniza.feit.site.domain.components.repository.LogoRepository;
+import sk.uniza.feit.site.domain.components.repository.MenuRepository;
+import sk.uniza.feit.site.domain.components.repository.OtherActivitiesRepository;
+import sk.uniza.feit.site.domain.components.repository.SliderRepository;
+import sk.uniza.feit.site.domain.components.repository.VideoRepository;
+import sk.uniza.feit.site.domain.components.repository.WhyFeitRepository;
 
 import java.util.List;
 
@@ -291,20 +315,25 @@ public class ComponentService {
         }
     }
 
-    public void createFeatureBox(FeatureBoxComponent entity) {
-        FeatureBoxComponent component = featureBoxRepository.findById(1L).orElse(null);
-
-        if (component != null) {
-            component.setVisible(entity.isVisible());
-            component.setTitle(entity.getTitle());
-            component.setDescription(entity.getDescription());
-            component.setImageUrl(entity.getImageUrl());
-            component.setLink(entity.getLink());
-            featureBoxRepository.save(component);
+    public void createFeatureBox(List<FeatureBoxComponent> entity, boolean visible) {
+        List<FeatureBoxComponent> existingComponents = featureBoxRepository.findAll();
+        if (existingComponents != null && !existingComponents.isEmpty()) {
+            for (int i = 0; i < existingComponents.size(); i++) {
+                FeatureBoxComponent component = existingComponents.get(i);
+                if (i < entity.size()) {
+                    component.setVisible(visible);
+                    component.setTitle(entity.get(i).getTitle());
+                    component.setDescription(entity.get(i).getDescription());
+                    component.setImageUrl(entity.get(i).getImageUrl());
+                    component.setLink(entity.get(i).getLink());
+                    featureBoxRepository.save(component);
+                }
+            }
         } else {
-            // create new component
-            entity.setId(1L);
-            featureBoxRepository.save(entity);
+            for (FeatureBoxComponent component : entity) {
+                component.setVisible(visible);
+                featureBoxRepository.save(component);
+            }
         }
     }
 

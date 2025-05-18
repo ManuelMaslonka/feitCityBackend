@@ -676,8 +676,8 @@ paths:
                     type: boolean
                     description: Whether the feature box components are visible
     post:
-      summary: Create a new feature box
-      operationId: createFeatureBox
+      summary: Update or set all feature boxes data
+      operationId: createFeatureBox # Note: You might want to rename this operationId and the corresponding controller method
       tags:
         - Components
       requestBody:
@@ -685,10 +685,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FeatureBoxComponent'
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FeatureBoxComponent'
+                visibility:
+                  type: boolean
+                  description: Whether the feature box components are visible
+              required: # Assuming items and visibility are required for an update
+                - items
+                - visibility
       responses:
         '200':
-          description: Feature box created
+          description: Feature boxes updated or set successfully
 
   /api/v1/components/dod:
     get:
@@ -951,6 +962,11 @@ components:
         visible:
           type: boolean
           description: Whether the feature box component is visible
+      required:
+        - title
+        - description
+        - imageUrl
+        - link
 
 
     CountdownComponent:

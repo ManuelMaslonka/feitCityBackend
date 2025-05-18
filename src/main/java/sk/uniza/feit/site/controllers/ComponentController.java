@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sk.uniza.feit.blog.domain.image.ImageService;
 import sk.uniza.feit.site.domain.components.ComponentService;
 import sk.uniza.feit.site.domain.components.models.CountdownComponent;
+import sk.uniza.feit.site.domain.components.models.FeatureBoxComponent;
 import sk.uniza.feit.site.domain.components.models.MenuComponent;
 import sk.uniza.feit.site.domain.components.models.WhyFeitComponent;
 import sk.uniza.feit.site.mappers.AfterSchoolComponentMapper;
@@ -22,6 +23,7 @@ import sk.uniza.feit.site.mappers.WhyFeitComponentMapper;
 import sk.uniza.feit.site.rest.api.ComponentsRestApi;
 import sk.uniza.feit.site.rest.dto.AfterSchoolComponentDto;
 import sk.uniza.feit.site.rest.dto.CountdownComponentDto;
+import sk.uniza.feit.site.rest.dto.CreateFeatureBoxRequestDto;
 import sk.uniza.feit.site.rest.dto.DODComponentDto;
 import sk.uniza.feit.site.rest.dto.FaqComponentDto;
 import sk.uniza.feit.site.rest.dto.FeatureBoxComponentDto;
@@ -84,9 +86,11 @@ public class ComponentController implements ComponentsRestApi {
     }
 
     @Override
-    public ResponseEntity<Void> createFeatureBox(FeatureBoxComponentDto featureBoxComponentDto) {
-        componentService.createFeatureBox(featureBoxComponentMapper.toEntity(featureBoxComponentDto));
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> createFeatureBox(CreateFeatureBoxRequestDto createFeatureBoxRequestDto) {
+        List<FeatureBoxComponent> featureBoxComponents = featureBoxComponentMapper.toEntity(createFeatureBoxRequestDto.getItems());
+        boolean visibility = createFeatureBoxRequestDto.getVisibility();
+        componentService.createFeatureBox(featureBoxComponents, visibility);
+        return null;
     }
 
     @Override
