@@ -29,7 +29,7 @@ public class UserFactory {
         boolean exist = userRepository.existsByEmail(signUpRequest.email());
 
         if (exist) {
-            throw new EmailAlreadyExistException("Email already exist");
+            throw new EmailAlreadyExistException("Email sa už používa.");
         }
 
         User user = new User(signUpRequest.name(), signUpRequest.email(), Role.ROLE_USER, password);
