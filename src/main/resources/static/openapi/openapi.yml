@@ -951,11 +951,6 @@ components:
         visible:
           type: boolean
           description: Whether the feature box component is visible
-      required:
-        - title
-        - description
-        - imageUrl
-        - link
 
 
     CountdownComponent:
