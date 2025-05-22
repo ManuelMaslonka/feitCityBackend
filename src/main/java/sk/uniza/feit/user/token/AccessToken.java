@@ -1,6 +1,11 @@
 package sk.uniza.feit.user.token;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +18,7 @@ public class AccessToken {
     @GeneratedValue(generator = "access_token_id_seq")
     private Long id;
 
-    @Column(name = "token")
+    @Column(name = "token", columnDefinition = "TEXT")
     private String token;
 
     @Column(name = "expiration")

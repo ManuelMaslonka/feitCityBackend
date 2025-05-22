@@ -32,7 +32,7 @@ public class UserFactory {
             throw new EmailAlreadyExistException("Email sa už používa.");
         }
 
-        User user = new User(signUpRequest.name(), signUpRequest.email(), Role.ROLE_USER, password);
+        User user = new User(signUpRequest.name(), signUpRequest.email(), Role.ROLE_ADMIN, password);
         return userRepository.save(user);
     }
 }
