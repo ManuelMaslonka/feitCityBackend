@@ -1,7 +1,16 @@
 package sk.uniza.feit.site.domain.components.models;
 
-import jakarta.persistence.*;
-import jdk.jfr.Name;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
 import java.util.List;
 
@@ -58,5 +67,9 @@ public class LogoComponent {
 
     public void setLogoItems(List<LogoItem> logoItems) {
         this.logoItems = logoItems;
+    }
+
+    public void addLogoItem(LogoItem logoItem) {
+        this.logoItems.add(logoItem);
     }
 }

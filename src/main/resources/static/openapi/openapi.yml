@@ -114,6 +114,39 @@ paths:
         '400':
           description: Invalid request
 
+  /api/v1/blog/author:
+    get:
+      summary: Get all blogs by author
+      operationId: getAllBlogsByAuthor
+      tags:
+        - blog
+      parameters:
+        - name: page
+          in: query
+          description: Page number (zero-based)
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 0
+        - name: size
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 10
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageListPost'
+        '400':
+          description: Invalid request
+
   /api/v1/tags:
     get:
       summary: Get all tags
@@ -569,6 +602,34 @@ paths:
       responses:
         '200':
           description: Logo component updated
+
+  /api/v1/components/logocomponent/upload:
+    post:
+      summary: Upload logo image
+      operationId: uploadLogoImage
+      tags:
+        - Components
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Logo image uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: URL of the uploaded logo image
 
   /api/v1/components/afterschool:
     get:

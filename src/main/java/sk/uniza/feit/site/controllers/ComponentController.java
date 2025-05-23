@@ -2,6 +2,7 @@ package sk.uniza.feit.site.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import sk.uniza.feit.blog.domain.image.ImageService;
 import sk.uniza.feit.site.domain.components.ComponentService;
 import sk.uniza.feit.site.domain.components.models.CountdownComponent;
@@ -34,6 +35,7 @@ import sk.uniza.feit.site.rest.dto.LogoComponentDto;
 import sk.uniza.feit.site.rest.dto.MenuComponentDto;
 import sk.uniza.feit.site.rest.dto.OtherActivitiesComponentDto;
 import sk.uniza.feit.site.rest.dto.SliderComponentDto;
+import sk.uniza.feit.site.rest.dto.UploadLogoImage200ResponseDto;
 import sk.uniza.feit.site.rest.dto.VideoComponentDto;
 import sk.uniza.feit.site.rest.dto.WhyFeitComponentDto;
 import sk.uniza.feit.site.utills.DateTimeConverter;
@@ -243,6 +245,17 @@ public class ComponentController implements ComponentsRestApi {
         WhyFeitComponent entity = whyFeitComponentMapper.toEntity(whyFeitComponentDto);
         componentService.updateWhyFeitComponent(entity);
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<UploadLogoImage200ResponseDto> uploadLogoImage(MultipartFile file) {
+        try {
+            String imageUrl = imageService.uploadImageIntern(file);
+            componentService.createLogoComponent(imageUrl);
+            return ResponseEntity.ok(new UploadLogoImage200ResponseDto().url(imageUrl));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to upload image", e);
+        }
     }
 
 }

@@ -90,6 +90,30 @@ public class ImageService {
         return baseUrl + apiUrl + imageBaseUrl + relativePath;
     }
 
+    public String uploadImageIntern(MultipartFile file) throws IOException {
+        Path directory = createDirectory("feitImages");
+        String originalFilename = file.getOriginalFilename();
+        String extension = getFileExtension(originalFilename);
+        String filename = UUID.randomUUID().toString() + "." + extension;
+
+        byte[] compressedImage = compressImage(file, extension);
+
+        Path targatPath = directory.resolve(filename);
+        Files.write(targatPath, compressedImage);
+
+        String relativePath = String.format("%s/%s", "feitImages", filename);
+
+        Image image = new Image(
+                null,
+                file.getOriginalFilename(),
+                file.getContentType(),
+                relativePath
+        );
+
+        imageRepository.save(image);
+        return relativePath;
+    }
+
     private byte[] compressImage(MultipartFile file, String extension) throws IOException {
         if (!isCompressibleImageFormat(extension)) {
             return file.getBytes();

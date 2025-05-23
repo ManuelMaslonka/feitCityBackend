@@ -16,6 +16,13 @@ import sk.uniza.feit.site.rest.dto.UploadImage200ResponseDto;
 
 import java.io.IOException;
 
+// TODO ukladat iba alias, nie email, pridat vymazat.
+// blog podla usera,
+// logo kompenent add button, zobrazit obrazok loga.
+// pridat upload obrazok pre logo.
+// co studovat, obrazky pozriet.
+// pozriet css na navbar.
+
 @RestController
 public class ImageController implements ImageRestApi {
 

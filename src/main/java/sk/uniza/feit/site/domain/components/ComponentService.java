@@ -10,6 +10,7 @@ import sk.uniza.feit.site.domain.components.models.FeatureBoxComponent;
 import sk.uniza.feit.site.domain.components.models.FeitStoryComponent;
 import sk.uniza.feit.site.domain.components.models.Footer;
 import sk.uniza.feit.site.domain.components.models.LogoComponent;
+import sk.uniza.feit.site.domain.components.models.LogoItem;
 import sk.uniza.feit.site.domain.components.models.MenuComponent;
 import sk.uniza.feit.site.domain.components.models.OtherActivitiesComponent;
 import sk.uniza.feit.site.domain.components.models.SliderComponent;
@@ -34,7 +35,7 @@ import java.util.List;
 @Service
 public class ComponentService {
 
-    private final FooterRepository footerRepository;
+
     @Value("${application.image.base-url}")
     private String imageBaseUrl;
 
@@ -56,12 +57,14 @@ public class ComponentService {
     private final OtherActivitiesRepository otherActivitiesRepository;
     private final FaqRepository faqRepository;
     private final MenuRepository menuRepository;
+    private final FooterRepository footerRepository;
+    private final LogoItemRepository logoItemRepository;
 
     public ComponentService(CountDownRepository countDownRepository, VideoRepository videoRepository, WhyFeitRepository whyFeitRepository,
                             DODRepository dodRepository, FeatureBoxRepository featureBoxRepository, SliderRepository sliderRepository,
                             FeitStoryRepository feitStoryRepository, AfterSchoolRepository afterSchoolRepository, LogoRepository logoRepository,
                             OtherActivitiesRepository otherActivitiesRepository, FaqRepository faqRepository, MenuRepository menuRepository,
-                            FooterRepository footerRepository) {
+                            FooterRepository footerRepository, LogoItemRepository logoItemRepository) {
         this.countDownRepository = countDownRepository;
         this.videoRepository = videoRepository;
         this.whyFeitRepository = whyFeitRepository;
@@ -75,6 +78,7 @@ public class ComponentService {
         this.faqRepository = faqRepository;
         this.menuRepository = menuRepository;
         this.footerRepository = footerRepository;
+        this.logoItemRepository = logoItemRepository;
     }
 
     public CountdownComponent getComponent() {
@@ -358,5 +362,13 @@ public class ComponentService {
 
         return footerRepository.findById(1L).orElse(null);
 
+    }
+
+    public void createLogoComponent(String imageUrl) {
+        LogoComponent all = logoRepository.findAll().getFirst();
+        LogoItem newItem = new LogoItem(imageUrl);
+        logoItemRepository.save(newItem);
+        all.addLogoItem(newItem);
+        logoRepository.save(all);
     }
 }

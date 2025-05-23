@@ -86,6 +86,13 @@ public class PostController implements BlogRestApi {
     }
 
     @Override
+    public ResponseEntity<PageListPostDto> getAllBlogsByAuthor(Long page, Long size) {
+        String author = currentUserDetailService.getFullCurrentUser().getName();
+        PageListPostDto pageListPostDto = PageListMapper.getPageListPostDto(postService.findAllPostByAuthor(page, size, author));
+        return ResponseEntity.ok(pageListPostDto);
+    }
+
+    @Override
     public ResponseEntity<PageListPostDto> getAllPosts(Long page, Long size) {
         PageListPostDto pageListPostDto = PageListMapper.getPageListPostDto(postService.findAll(page, size));
         return ResponseEntity.ok(pageListPostDto);

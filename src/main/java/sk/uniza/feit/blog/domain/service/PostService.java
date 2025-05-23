@@ -30,6 +30,12 @@ public class PostService {
         return new PageList<>(posts.getContent(), posts.getTotalElements(), posts.hasNext());
     }
 
+    public PageList<Post> findAllPostByAuthor(Long page, Long size, String author) {
+        Pageable pageable = PageRequest.of(page.intValue(), size.intValue()).withSort(Sort.by("createdAt").descending());
+        Page<Post> posts = postRepository.findAllByAuthor(author, pageable);
+        return new PageList<>(posts.getContent(), posts.getTotalElements(), posts.hasNext());
+    }
+
     public Post save(Post post) {
         return postRepository.save(post);
     }

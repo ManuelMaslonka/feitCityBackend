@@ -15,4 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT DISTINCT p FROM Post p JOIN p.tags t WHERE t.name IN :tagNames")
     Page<Post> findAllByTags(@Param("tagNames") List<String> tagNames, Pageable pageable);
+
+    Page<Post> findAllByAuthor(String author, Pageable pageable);
 }
