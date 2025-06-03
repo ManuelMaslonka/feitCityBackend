@@ -147,6 +147,47 @@ paths:
         '400':
           description: Invalid request
 
+  /api/v1/blog/author/{name}:
+    get:
+      summary: Get all blogs by author name
+      operationId: getBlogsByAuthorName
+      tags:
+        - blog
+      parameters:
+        - name: name
+          in: path
+          description: Author name to filter by
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Page number (zero-based)
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 0
+        - name: size
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 10
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageListPost'
+        '400':
+          description: Invalid request
+        '404':
+          description: Author not found
+
   /api/v1/tags:
     get:
       summary: Get all tags
