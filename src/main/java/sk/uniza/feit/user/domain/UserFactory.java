@@ -1,6 +1,7 @@
 package sk.uniza.feit.user.domain;
 
 import org.springframework.stereotype.Component;
+import sk.uniza.feit.blog.domain.AlreadyExistEntity;
 import sk.uniza.feit.security.domain.dto.SignUpRequest;
 import sk.uniza.feit.user.exception.EmailAlreadyExistException;
 
@@ -27,9 +28,14 @@ public class UserFactory {
 
     public User create(SignUpRequest signUpRequest, String password) {
         boolean exist = userRepository.existsByEmail(signUpRequest.email());
+        boolean userNameAlreadyExist = userRepository.existsByName(signUpRequest.name());
 
         if (exist) {
             throw new EmailAlreadyExistException("Email sa už používa.");
+        }
+
+        if (userNameAlreadyExist) {
+            throw new AlreadyExistEntity("Používateľské meno sa už používa.");
         }
 
         User user = new User(signUpRequest.name(), signUpRequest.email(), Role.ROLE_ADMIN, password);
