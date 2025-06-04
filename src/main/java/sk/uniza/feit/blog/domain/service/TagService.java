@@ -72,4 +72,11 @@ public class TagService {
     public void deleteById(Long id) {
         tagRepository.deleteById(id);
     }
+
+    public void deleteAll(List<Tag> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return;
+        }
+        tagRepository.deleteAll(tags);
+    }
 }

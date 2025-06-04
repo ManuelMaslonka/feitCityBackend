@@ -49,6 +49,12 @@ public class PostService {
     }
 
     public void deleteById(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
+
+        if (post.getTags() != null && !post.getTags().isEmpty()) {
+            tagService.deleteAll(post.getTags());
+        }
+
         postRepository.deleteById(id);
     }
 
