@@ -14,7 +14,9 @@ import sk.uniza.feit.site.domain.components.models.LogoItem;
 import sk.uniza.feit.site.domain.components.models.MenuComponent;
 import sk.uniza.feit.site.domain.components.models.OtherActivitiesComponent;
 import sk.uniza.feit.site.domain.components.models.SliderComponent;
+import sk.uniza.feit.site.domain.components.models.SliderItem;
 import sk.uniza.feit.site.domain.components.models.VideoComponent;
+import sk.uniza.feit.site.domain.components.models.VideoItem;
 import sk.uniza.feit.site.domain.components.models.WhyFeitComponent;
 import sk.uniza.feit.site.domain.components.repository.AfterSchoolRepository;
 import sk.uniza.feit.site.domain.components.repository.CountDownRepository;
@@ -31,6 +33,7 @@ import sk.uniza.feit.site.domain.components.repository.VideoRepository;
 import sk.uniza.feit.site.domain.components.repository.WhyFeitRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ComponentService {
@@ -117,7 +120,7 @@ public class ComponentService {
         if (existingComponent != null) {
             existingComponent.setTitle(component.getTitle());
             existingComponent.setWhyFeitLists(component.getWhyFeitLists());
-            existingComponent.setImageUrl(component.getImageUrl());
+            existingComponent.setImageUrl(urlTrimmer(component.getImageUrl()));
             existingComponent.setVideoUrl(component.getVideoUrl());
             existingComponent.setCountPrograms(component.getCountPrograms());
             existingComponent.setCountDescription(component.getCountDescription());
@@ -152,7 +155,19 @@ public class ComponentService {
             existingComponent.setTitle(component.getTitle());
             existingComponent.setLabel(component.getLabel());
             existingComponent.setDescription(component.getDescription());
-            existingComponent.setItems(component.getItems());
+
+            List<SliderItem> trimmedSliderItems = component.getItems().stream()
+                    .map(sliderItem -> {
+                        String imageUrl = sliderItem.getImageUrl();
+                        if (imageUrl != null && imageUrl.contains(baseUrl + apiUrl + imageBaseUrl)) {
+                            String updatedImageUrl = imageUrl.replace(baseUrl + apiUrl + imageBaseUrl, "");
+                            return new SliderItem(sliderItem.getId(), sliderItem.getTitle(), sliderItem.getDescription(), sliderItem.getInfoDescription(), sliderItem.getLabel()
+                                    , updatedImageUrl, sliderItem.getVideoUrl(), sliderItem.getIconsStyle());
+                        }
+                        return sliderItem;
+                    }).collect(Collectors.toList());
+
+            existingComponent.setItems(trimmedSliderItems);
             existingComponent.setVisible(component.isVisible());
             sliderRepository.save(existingComponent);
         } else {
@@ -165,7 +180,18 @@ public class ComponentService {
         FeitStoryComponent existingComponent = feitStoryRepository.findById(1L).orElse(null);
         if (existingComponent != null) {
             existingComponent.setTitle(component.getTitle());
-            existingComponent.setVideoItemList(component.getVideoItemList());
+
+            List<VideoItem> trimmedVideoItems = component.getVideoItemList().stream()
+                    .map(videoItem -> {
+                        String imageUrl = videoItem.getImageUrl();
+                        if (imageUrl != null && imageUrl.contains(baseUrl + apiUrl + imageBaseUrl)) {
+                            String updatedImageUrl = imageUrl.replace(baseUrl + apiUrl + imageBaseUrl, "");
+                            return new VideoItem(videoItem.getId(), videoItem.getTitle(), videoItem.getVideoUrl(), updatedImageUrl);
+                        }
+                        return videoItem;
+                    }).toList();
+
+            existingComponent.setVideoItemList(trimmedVideoItems);
             existingComponent.setVisible(component.isVisible());
             feitStoryRepository.save(existingComponent);
         } else {
@@ -180,8 +206,8 @@ public class ComponentService {
             existingComponent.setTitle(component.getTitle());
             existingComponent.setLabel(component.getLabel());
             existingComponent.setDescription(component.getDescription());
-            existingComponent.setImageUrl(component.getImageUrl());
-            existingComponent.setImageUrl1(component.getImageUrl1());
+            existingComponent.setImageUrl(urlTrimmer(component.getImageUrl()));
+            existingComponent.setImageUrl1(urlTrimmer(component.getImageUrl1()));
             existingComponent.setVisible(component.getVisible());
             afterSchoolRepository.save(existingComponent);
         } else {
@@ -385,5 +411,12 @@ public class ComponentService {
         logoItemRepository.save(newItem);
         all.addLogoItem(newItem);
         logoRepository.save(all);
+    }
+
+    private String urlTrimmer(String imageUrl) {
+        if (imageUrl != null && imageUrl.contains(baseUrl + apiUrl + imageBaseUrl)) {
+            return imageUrl.replace(baseUrl + apiUrl + imageBaseUrl, "");
+        }
+        return imageUrl;
     }
 }
