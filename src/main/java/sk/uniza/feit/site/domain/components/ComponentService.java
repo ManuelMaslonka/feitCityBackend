@@ -383,20 +383,29 @@ public class ComponentService {
     }
 
     public void updateFooterComponent(Footer entity) {
-
         Footer existingComponent = footerRepository.findById(1L).orElse(null);
         if (existingComponent != null) {
-            existingComponent.setLocationColumn(entity.getLocationColumn());
-            existingComponent.setContactColumn(entity.getContactColumn());
-            existingComponent.setSocialColumn(entity.getSocialColumn());
-            existingComponent.setShopColumn(entity.getShopColumn());
-            existingComponent.setNavigationColumn(entity.getNavigationColumn());
+            // Clear and update collections instead of replacing them
+            updateCollection(existingComponent.getLocationColumn(), entity.getLocationColumn());
+            updateCollection(existingComponent.getContactColumn(), entity.getContactColumn());
+            updateCollection(existingComponent.getSocialColumn(), entity.getSocialColumn());
+            updateCollection(existingComponent.getShopColumn(), entity.getShopColumn());
+            updateCollection(existingComponent.getNavigationColumn(), entity.getNavigationColumn());
+
             footerRepository.save(existingComponent);
         } else {
             entity.setId(1L);
             footerRepository.save(entity);
         }
+    }
 
+    private <T> void updateCollection(List<T> existingList, List<T> newList) {
+        if (existingList == null || newList == null) {
+            return;
+        }
+
+        existingList.clear();
+        existingList.addAll(newList);
     }
 
     public Footer getFooterComponent() {
