@@ -1,13 +1,19 @@
 package sk.uniza.feit.site.domain.components.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
 @Table
 @Entity
 public class ShopColumn {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "shop_column_id_seq", sequenceName = "shop_column_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "shop_column_id_seq")
     private Long id;
 
     private String text;

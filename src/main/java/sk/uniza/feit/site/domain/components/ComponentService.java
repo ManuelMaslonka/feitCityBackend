@@ -3,18 +3,23 @@ package sk.uniza.feit.site.domain.components;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sk.uniza.feit.site.domain.components.models.AfterSchoolComponent;
+import sk.uniza.feit.site.domain.components.models.ContactColumn;
 import sk.uniza.feit.site.domain.components.models.CountdownComponent;
 import sk.uniza.feit.site.domain.components.models.DODComponent;
 import sk.uniza.feit.site.domain.components.models.FaqComponent;
 import sk.uniza.feit.site.domain.components.models.FeatureBoxComponent;
 import sk.uniza.feit.site.domain.components.models.FeitStoryComponent;
 import sk.uniza.feit.site.domain.components.models.Footer;
+import sk.uniza.feit.site.domain.components.models.LocationColumn;
 import sk.uniza.feit.site.domain.components.models.LogoComponent;
 import sk.uniza.feit.site.domain.components.models.LogoItem;
 import sk.uniza.feit.site.domain.components.models.MenuComponent;
+import sk.uniza.feit.site.domain.components.models.NavigationColumn;
 import sk.uniza.feit.site.domain.components.models.OtherActivitiesComponent;
+import sk.uniza.feit.site.domain.components.models.ShopColumn;
 import sk.uniza.feit.site.domain.components.models.SliderComponent;
 import sk.uniza.feit.site.domain.components.models.SliderItem;
+import sk.uniza.feit.site.domain.components.models.SocialColumn;
 import sk.uniza.feit.site.domain.components.models.VideoComponent;
 import sk.uniza.feit.site.domain.components.models.VideoItem;
 import sk.uniza.feit.site.domain.components.models.WhyFeitComponent;
@@ -385,12 +390,46 @@ public class ComponentService {
     public void updateFooterComponent(Footer entity) {
         Footer existingComponent = footerRepository.findById(1L).orElse(null);
         if (existingComponent != null) {
-            // Clear and update collections instead of replacing them
-            updateCollection(existingComponent.getLocationColumn(), entity.getLocationColumn());
-            updateCollection(existingComponent.getContactColumn(), entity.getContactColumn());
-            updateCollection(existingComponent.getSocialColumn(), entity.getSocialColumn());
-            updateCollection(existingComponent.getShopColumn(), entity.getShopColumn());
-            updateCollection(existingComponent.getNavigationColumn(), entity.getNavigationColumn());
+            // Clear existing collections
+            existingComponent.getLocationColumn().clear();
+            existingComponent.getContactColumn().clear();
+            existingComponent.getSocialColumn().clear();
+            existingComponent.getShopColumn().clear();
+            existingComponent.getNavigationColumn().clear();
+
+            // Save the cleared collections first
+            footerRepository.save(existingComponent);
+
+            // Create new instances for each column instead of modifying existing ones
+            if (entity.getLocationColumn() != null) {
+                entity.getLocationColumn().forEach(item -> {
+                    existingComponent.getLocationColumn().add(new LocationColumn(null, item.getText(), item.getUrl()));
+                });
+            }
+
+            if (entity.getContactColumn() != null) {
+                entity.getContactColumn().forEach(item -> {
+                    existingComponent.getContactColumn().add(new ContactColumn(null, item.getText(), item.getUrl()));
+                });
+            }
+
+            if (entity.getSocialColumn() != null) {
+                entity.getSocialColumn().forEach(item -> {
+                    existingComponent.getSocialColumn().add(new SocialColumn(null, item.getText(), item.getUrl(), item.getIcon()));
+                });
+            }
+
+            if (entity.getShopColumn() != null) {
+                entity.getShopColumn().forEach(item -> {
+                    existingComponent.getShopColumn().add(new ShopColumn(null, item.getText(), item.getUrl()));
+                });
+            }
+
+            if (entity.getNavigationColumn() != null) {
+                entity.getNavigationColumn().forEach(item -> {
+                    existingComponent.getNavigationColumn().add(new NavigationColumn(null, item.getText(), item.getUrl()));
+                });
+            }
 
             footerRepository.save(existingComponent);
         } else {
@@ -398,16 +437,6 @@ public class ComponentService {
             footerRepository.save(entity);
         }
     }
-
-    private <T> void updateCollection(List<T> existingList, List<T> newList) {
-        if (existingList == null || newList == null) {
-            return;
-        }
-
-        existingList.clear();
-        existingList.addAll(newList);
-    }
-
     public Footer getFooterComponent() {
 
         return footerRepository.findById(1L).orElse(null);
