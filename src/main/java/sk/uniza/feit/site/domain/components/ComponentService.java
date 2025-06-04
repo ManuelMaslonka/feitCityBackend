@@ -192,14 +192,28 @@ public class ComponentService {
 
     public void updateLogoComponent(LogoComponent component) {
         LogoComponent existingComponent = logoRepository.findById(1L).orElse(null);
-        if (existingComponent != null) {
-            existingComponent.setLogoItems(component.getLogoItems());
-            existingComponent.setVisible(component.isVisible());
-            logoRepository.save(existingComponent);
-        } else {
+        if (existingComponent == null) {
             component.setId(1L);
             logoRepository.save(component);
+            return;
         }
+
+        existingComponent.getLogoItems().clear();
+
+        for (LogoItem logoItem : component.getLogoItems()) {
+            String imageUrl = logoItem.getImageUrl();
+            if (imageUrl != null && imageUrl.contains(baseUrl + apiUrl + imageBaseUrl)) {
+                String updatedImageUrl = imageUrl.replace(baseUrl + apiUrl + imageBaseUrl, "");
+                LogoItem newLogoItem = new LogoItem(null, updatedImageUrl, logoItem.isAlt());
+                existingComponent.addLogoItem(newLogoItem);
+            } else if (imageUrl != null) {
+                LogoItem newLogoItem = new LogoItem(null, imageUrl, logoItem.isAlt());
+                existingComponent.addLogoItem(newLogoItem);
+            }
+        }
+
+        existingComponent.setVisible(component.isVisible());
+        logoRepository.save(existingComponent);
     }
 
     public void updateOtherActivitiesComponent(OtherActivitiesComponent component) {

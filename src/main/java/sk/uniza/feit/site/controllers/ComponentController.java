@@ -251,7 +251,6 @@ public class ComponentController implements ComponentsRestApi {
     public ResponseEntity<UploadLogoImage200ResponseDto> uploadLogoImage(MultipartFile file) {
         try {
             String imageUrl = imageService.uploadImageIntern(file);
-            componentService.createLogoComponent(imageUrl);
             return ResponseEntity.ok(new UploadLogoImage200ResponseDto().url(imageUrl));
         } catch (Exception e) {
             throw new RuntimeException("Failed to upload image", e);

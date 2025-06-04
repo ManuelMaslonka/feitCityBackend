@@ -111,7 +111,7 @@ public class ImageService {
         );
 
         imageRepository.save(image);
-        return relativePath;
+        return baseUrl + apiUrl + imageBaseUrl + relativePath;
     }
 
     private byte[] compressImage(MultipartFile file, String extension) throws IOException {
