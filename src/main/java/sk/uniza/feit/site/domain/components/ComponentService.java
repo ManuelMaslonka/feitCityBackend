@@ -342,7 +342,8 @@ public class ComponentService {
                     component.setVisible(visible);
                     component.setTitle(entity.get(i).getTitle());
                     component.setDescription(entity.get(i).getDescription());
-                    component.setImageUrl(entity.get(i).getImageUrl());
+                    String imageUrl = entity.get(i).getImageUrl().replace(baseUrl + apiUrl + imageBaseUrl, "");
+                    component.setImageUrl(imageUrl);
                     component.setLink(entity.get(i).getLink());
                     featureBoxRepository.save(component);
                 }
