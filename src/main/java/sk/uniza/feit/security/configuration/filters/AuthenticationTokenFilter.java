@@ -48,6 +48,8 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
                         );
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } else {
+                LOGGER.warn("JWT token is invalid or not present in the request");
             }
         } catch (Exception e) {
             LOGGER.error("Cannot set user dto: ", e);

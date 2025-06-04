@@ -13,7 +13,9 @@ import sk.uniza.feit.user.token.AccessToken;
 import sk.uniza.feit.user.token.AccessTokenRepository;
 
 import javax.crypto.SecretKey;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -35,8 +37,9 @@ public class JwtUtils {
 
     public AccessToken generateJwtToken(Authentication authentication) {
         User userPrincipal = (User) authentication.getPrincipal();
-        Date date = new Date((new Date()).getTime() + jwtExpirationMs);
-        LocalDateTime expiration = LocalDateTime.now().plusSeconds(jwtExpirationMs / 1000);
+        Instant expirationInstant = Instant.now().plusMillis(jwtExpirationMs);
+        Date date = Date.from(expirationInstant);
+        LocalDateTime expiration = LocalDateTime.ofInstant(expirationInstant, ZoneId.systemDefault());
 
         String token = Jwts.builder()
                 .subject(userPrincipal.getUsername())
@@ -77,6 +80,13 @@ public class JwtUtils {
         try {
             boolean isSigned = Jwts.parser().verifyWith(getSigningKey()).build().isSigned(token);
             AccessToken accessToken = accessTokenRepository.findByToken(token);
+
+            LocalDateTime now = LocalDateTime.now();
+            if (accessToken != null && accessToken.getExpiration().isBefore(now)) {
+                logger.warn("JWT token is expired: {}", token);
+                return false;
+            }
+
             boolean exist = accessToken != null;
             return isSigned && exist;
         } catch (Exception e) {
