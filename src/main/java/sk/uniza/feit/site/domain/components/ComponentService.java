@@ -194,7 +194,7 @@ public class ComponentService {
                             return new VideoItem(videoItem.getId(), videoItem.getTitle(), videoItem.getVideoUrl(), updatedImageUrl);
                         }
                         return videoItem;
-                    }).toList();
+                    }).collect(Collectors.toList());
 
             existingComponent.setVideoItemList(trimmedVideoItems);
             existingComponent.setVisible(component.isVisible());
