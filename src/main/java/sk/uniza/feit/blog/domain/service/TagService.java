@@ -33,6 +33,15 @@ public class TagService {
         return tagMapper.toDto(save);
     }
 
+    public Tag createPure(String tagName) {
+        if (tagRepository.existsByName(tagName)) {
+            throw new AlreadyExistEntity("Tag with name " + tagName + " already exists");
+        }
+
+        Tag tag = new Tag(tagName);
+        return tagRepository.save(tag);
+    }
+
     public List<Tag> create(List<String> tags) {
         for (String tagName : tags) {
             // Find existing tag or create a new one

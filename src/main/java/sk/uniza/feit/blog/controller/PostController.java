@@ -60,9 +60,11 @@ public class PostController implements BlogRestApi {
             post.setAuthor(currentUserDetailService.getFullCurrentUser().getName());
             post.setCreatedAt(LocalDateTime.now());
 
-            if (postRequestDto.getTags() != null) {
+            if (!postRequestDto.getTags().isEmpty()) {
                 List<Tag> tags = tagService.create(postRequestDto.getTags());
                 post.setTags(tags);
+            } else {
+                post.setTags(List.of(tagService.createPure("Nezaradený")));
             }
 
 
