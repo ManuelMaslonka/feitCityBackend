@@ -674,7 +674,7 @@ paths:
         '200':
           description: Logo component updated
 
-  /api/v1/components/logocomponent/upload:
+  /api/v1/components/intern/upload:
     post:
       summary: Upload logo image
       operationId: uploadLogoImage
