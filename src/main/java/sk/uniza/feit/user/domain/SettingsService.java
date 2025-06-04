@@ -15,17 +15,12 @@ public class SettingsService {
         return settingsRepository.findAll().get(0);
     }
 
-    public boolean getEnabledLogin() {
-        return settingsRepository.findAll().get(0).isEnabledLogin();
-    }
-
     public boolean getEnabledRegistration() {
         return settingsRepository.findAll().get(0).isEnabledRegistration();
     }
 
     public void updateSettings(Settings settings) {
         Settings oldSettings = settingsRepository.findAll().get(0);
-        oldSettings.setEnabledLogin(settings.isEnabledLogin());
         oldSettings.setEnabledRegistration(settings.isEnabledRegistration());
         settingsRepository.save(oldSettings);
     }

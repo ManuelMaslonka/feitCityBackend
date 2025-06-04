@@ -1,6 +1,10 @@
 package sk.uniza.feit.user.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Table
 @Entity
@@ -12,15 +16,12 @@ public class Settings {
 
     private boolean enabledRegistration;
 
-    private boolean enabledLogin;
-
     public Settings() {
     }
 
-    public Settings(Long id, boolean enabledRegistration, boolean enabledLogin) {
+    public Settings(Long id, boolean enabledRegistration) {
         this.id = id;
         this.enabledRegistration = enabledRegistration;
-        this.enabledLogin = enabledLogin;
     }
 
     public Long getId() {
@@ -39,11 +40,4 @@ public class Settings {
         this.enabledRegistration = enabledRegistration;
     }
 
-    public boolean isEnabledLogin() {
-        return enabledLogin;
-    }
-
-    public void setEnabledLogin(boolean enabledLogin) {
-        this.enabledLogin = enabledLogin;
-    }
 }

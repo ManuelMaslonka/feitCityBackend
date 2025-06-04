@@ -57,10 +57,6 @@ public class AuthenticationRestController implements AuthenticationRestApi {
 
     @Override
     public ResponseEntity<SignInResponseDto> signin(SignInRequestDto signInRequestDto) {
-        if (!settingsService.getEnabledLogin()) {
-            return ResponseEntity.notFound().build();
-        }
-
         SignInRequest signInRequest = signInRequestMapper.toEntity(signInRequestDto);
         SignInResponse signInResponse = authenticationService.signInUser(signInRequest);
         return ResponseEntity.ok(signInResponseMapper.toDto(signInResponse));

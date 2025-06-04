@@ -7,6 +7,36 @@ servers:
   - url: http://localhost:8080/
 
 paths:
+  /api/v1/settings:
+    get:
+      summary: Get system settings
+      operationId: getSettings
+      tags:
+        - Settings
+      responses:
+        '200':
+          description: System settings retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+    post:
+      summary: Update system settings
+      operationId: updateSettings
+      tags:
+        - Settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+      responses:
+        '204':
+          description: Settings updated successfully, no content returned
+        '400':
+          description: Invalid settings data
+
   /api/v1/components/footer:
     get:
       summary: Get footer component data
@@ -1042,6 +1072,15 @@ components:
       required:
         - url
         - text
+
+    Settings:
+      type: object
+      properties:
+        enabledRegistration:
+          type: boolean
+          description: Whether user registration is enabled
+      required:
+        - enabledRegistration
 
     FeatureBoxComponent:
       type: object
