@@ -1,5 +1,6 @@
 package sk.uniza.feit.blog.domain.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -7,9 +8,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sk.uniza.feit.blog.domain.PageList;
 import sk.uniza.feit.blog.domain.Post;
+import sk.uniza.feit.blog.domain.Tag;
 import sk.uniza.feit.blog.domain.repository.PostRepository;
 import sk.uniza.feit.site.rest.dto.PostRequestDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,14 +51,21 @@ public class PostService {
         return postRepository.findByTags(tags);
     }
 
+    @Transactional
     public void deleteById(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
-
-        if (post.getTags() != null && !post.getTags().isEmpty()) {
-            tagService.deleteAll(post.getTags());
-        }
-
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
+        List<Tag> tagsToCheck = new ArrayList<>(post.getTags());
         postRepository.deleteById(id);
+
+        List<Post> remainingPosts = postRepository.findAll();
+        for (Tag tag : tagsToCheck) {
+            boolean tagIsUsed = remainingPosts.stream()
+                    .anyMatch(p -> p.getTags() != null && p.getTags().contains(tag));
+            if (!tagIsUsed) {
+                tagService.deleteById(tag.getId());
+            }
+        }
     }
 
     public Post updatePost(Long id, PostRequestDto postRequestDto) {
