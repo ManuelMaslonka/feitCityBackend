@@ -1,33 +1,37 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres # Pripojenie na PostgreSQL databázu (host, port, názov databázy)
+    username: postgres                              # Meno databázového používateľa
+    password: postgres                              # Heslo databázového používateľa
+    driver-class-name: org.postgresql.Driver        # JDBC driver pre PostgreSQL
+
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: update               # Automatické úpravy schémy databázy podľa entít (nevhodné pre produkciu – tam použi 'validate' alebo migračný nástroj)
+    show-sql: true                   # Zobrazovanie SQL príkazov v konzole počas behu aplikácie
     properties:
       hibernate:
-        format_sql: true
+        format_sql: true            # Formátovanie SQL výstupu pre lepšiu čitateľnosť v logoch
     database: postgresql
     generate-ddl: true
+
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
-
+      max-file-size: 10MB            # Maximálna veľkosť jedného nahrávaného súboru
+      max-request-size: 10MB         # Maximálna veľkosť celej HTTP požiadavky (ak obsahuje viacero súborov)
 
 application:
-  name: FeitUniza
+  name: FeitUniza                    # Názov aplikácie – môže byť využitý napr. v logovaní alebo ako profil v monitoring systémoch
+
   security:
-    enable: true
+    enable: true                     # Zapnutie bezpečnostných mechanizmov (napr. autentifikácia)
     jwt:
-      secret-key: "f45666c0d61ee85f12c95767f3c27ae4c08711387ada21ab3ba6828a133dd278"
-      expiration: "28800000" # 8 hours in milliseconds
+      secret-key: "f45666c0d61ee85f12c95767f3c27ae4c08711387ada21ab3ba6828a133dd278" # Tajný kľúč pre podpisovanie JWT tokenov (!!! nenechávať verejne !!!)
+      expiration: "28800000"         # Expirácia JWT tokenu – v milisekundách (8 hodín)
+
   url:
-    base-url: "http://localhost:8080/"
-    api-url: "api/v1/"
+    base-url: "http://localhost:8080/" # Základná URL adresa backendu
+    api-url: "api/v1/"                 # Prefix pre REST API endpointy (napr. /api/v1/articles)
+
   image:
-    base-url: "images/"
+    base-url: "images/"               # Relatívna cesta pre obrázky – použité pri generovaní URL k uploadnutým obrázkom
