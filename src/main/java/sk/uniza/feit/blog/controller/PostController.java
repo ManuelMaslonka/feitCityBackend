@@ -64,7 +64,7 @@ public class PostController implements BlogRestApi {
                 List<Tag> tags = tagService.create(postRequestDto.getTags());
                 post.setTags(tags);
             } else {
-                post.setTags(List.of(tagService.createPure("Nezaradený")));
+                post.setTags(List.of(tagService.findOrCreate("Nezaradený")));
             }
 
 
